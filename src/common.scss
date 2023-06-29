@@ -1,0 +1,13 @@
+// CUSTOM WIDTH CLASSES
+@for $i from 0 through 100 {
+    .w-#{$i} {
+        width: percentage(calc($i/100)) !important ;
+    }
+}
+
+// CUSTOM HEIGHT CLASSES
+@for $i from 0 through 100 {
+    .h-#{$i} {
+        height: percentage(calc($i/100)) !important;
+    }
+}
