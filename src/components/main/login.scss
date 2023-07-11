@@ -1,6 +1,8 @@
+@import "../../variables.scss";
+
 .login-page {
     .login-background {
-        background-color: #2281ff;
+        background-color: $primary-blue;
         position: fixed;
         top: 0;
         left: 0;
@@ -13,7 +15,7 @@
             position: absolute;
             height: 100px;
             width: 100px;
-            background-color: #5da2ff;
+            background-color: $light-blue;
             border-radius: 50%;
         }
         &::before {
@@ -34,7 +36,7 @@
         }
     }
     .login-content-container {
-        background-color: white;
+        background-color: $white;
         position: absolute;
         height: 70%;
         width: 65%;

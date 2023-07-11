@@ -1,3 +1,5 @@
+@import "./variables.scss";
+
 // CUSTOM WIDTH CLASSES
 @for $i from 0 through 100 {
     .w-#{$i} {
@@ -9,5 +11,18 @@
 @for $i from 0 through 100 {
     .h-#{$i} {
         height: percentage(calc($i/100)) !important;
+    }
+}
+
+.form-control {
+    @at-root {
+        input#{&} {
+            transition: all 0.3s ease-in-out;
+            box-shadow: none !important;
+            border-width: 2px !important;
+            &:focus {
+                border-color: $primary-blue !important;
+            }
+        }
     }
 }

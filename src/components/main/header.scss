@@ -1,0 +1,23 @@
+@import "../../variables.scss";
+
+.main-header {
+    max-width: 100%;
+    width: 100%;
+    padding: 0px 0px;
+    background-color: transparent;
+    z-index: 3;
+    .header-content {
+        height: 80px;
+        background-color: $primary-blue;
+        // border-radius: 8px;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 0px 20px;
+        box-shadow: 0px 2px 4px #0008;
+        .site-title {
+            color: $white;
+        }
+    }
+}
