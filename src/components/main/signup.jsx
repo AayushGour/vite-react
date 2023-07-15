@@ -30,7 +30,6 @@ const SignupComponent = (props) => {
             }
         }
         axios(config).then((resp) => {
-            console.log(resp);
             toast.success(resp?.data?.data?.message);
             navigate("/login");
         }).catch((e) => {
