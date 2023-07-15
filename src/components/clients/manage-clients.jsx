@@ -72,7 +72,7 @@ const ManageClientsComponent = (props) => {
         return <Loader />
     }
     return (
-        <div className="manage-clients-container h-100 w-100 p-4">
+        <div className="manage-clients-container h-100 w-100 py-4 px-5">
             <SecondaryHeader
                 title="Manage Clients"
                 extraDetails={

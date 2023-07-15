@@ -9,6 +9,7 @@ import LoginComponent from './login';
 import CreateUserComponent from '../employees/create-employee';
 import DashboardComponent from './dashboard';
 import SignupComponent from './signup';
+import AttendanceComponent from './attendance';
 
 const RouterComponent = (props) => {
     return (
@@ -27,7 +28,7 @@ const RouterComponent = (props) => {
                     <Route path="create-client" element={<CreateClientComponent />} />
                 </Route>
 
-                <Route path="attendance" element={"Coming Soon"} />
+                <Route path="attendance" element={<AttendanceComponent />} />
             </Route>
             <Route path="*" element={<Navigate to="/" />} />
         </Routes>

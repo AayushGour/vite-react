@@ -43,7 +43,7 @@ const DashboardComponent = (props) => {
         })
     }
     return (
-        <div className="dashboard-container p-4 h-100 w-100">
+        <div className="dashboard-container px-5 py-4 h-100 w-100">
             <SecondaryHeader title="Dashboard" />
             <div className="cards-container d-flex flex-row flex-wrap gap-3">
                 {loaderFlag ? <Loader />

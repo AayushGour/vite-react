@@ -84,7 +84,7 @@ const ManageUserComponent = (props) => {
         return <Loader />
     }
     return (
-        <div className="manage-employees-container h-100 w-100 p-4">
+        <div className="manage-employees-container h-100 w-100 py-4 px-5">
             <SecondaryHeader
                 title="Manage Employees"
                 extraDetails={
