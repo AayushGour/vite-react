@@ -26,3 +26,31 @@
         }
     }
 }
+
+.btn {
+    outline: none;
+    &.btn-ghost {
+        &:hover {
+            color: $primary-blue;
+        }
+        &:active {
+            border-color: transparent;
+        }
+    }
+    &.btn-primary {
+        background-color: $primary-blue;
+        border-color: $primary-blue;
+    }
+    &.btn-secondary {
+        background-color: $white;
+        border-color: $primary-blue;
+        color: $black;
+        &:active {
+            background-color: $secondary-blue;
+        }
+    }
+}
+
+.card {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 255, 0.1);
+}

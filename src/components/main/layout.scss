@@ -21,4 +21,7 @@
         opacity: 0.9;
         filter: saturate(4);
     }
+    .layout-container {
+        height: calc(100% - 70px);
+    }
 }

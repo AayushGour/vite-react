@@ -8,7 +8,7 @@ const LayoutComponent = (props) => {
     return (
         <div className='root-container h-100 w-100'>
             <HeaderComponent />
-            <div className="d-flex flex-row align-items-start w-100 h-100">
+            <div className="layout-container d-flex flex-row align-items-start w-100">
                 <LeftSidebar />
                 <MainComponent />
             </div>

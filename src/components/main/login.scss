@@ -2,7 +2,8 @@
 
 .login-page {
     .login-background {
-        background-color: $primary-blue;
+        // background-color: $primary-blue;
+        background-color: rgba(0, 0, 0, 0.9);
         position: fixed;
         top: 0;
         left: 0;
@@ -15,23 +16,32 @@
             position: absolute;
             height: 100px;
             width: 100px;
-            background-color: $light-blue;
+            // background-color: $light-blue;
+            background-color: #555555;
             border-radius: 50%;
         }
         &::before {
             left: 20px;
             bottom: 20px;
-            box-shadow: 0 0 5px 0px rgba(0, 0, 0, 0.5333333333), 20px -20px 0 60px #5aa0ff,
-                20px -20px 60px 40px rgba(0, 0, 0, 0.5333333333), 40px -40px 0 130px #519dff,
-                40px -40px 120px 100px rgba(0, 0, 0, 0.5333333333), 60px -60px 0 240px #4193ff,
+            // box-shadow: 0 0 5px 0px rgba(0, 0, 0, 0.5333333333), 20px -20px 0 60px #5aa0ff,
+            //     20px -20px 60px 40px rgba(0, 0, 0, 0.5333333333), 40px -40px 0 130px #519dff,
+            //     40px -40px 120px 100px rgba(0, 0, 0, 0.5333333333), 60px -60px 0 240px #4193ff,
+            //     60px -60px 240px 200px rgba(0, 0, 0, 0.5333333333);
+            box-shadow: 0 0 5px 0px rgba(0, 0, 0, 0.5333333333), 20px -20px 0 60px #424242,
+                20px -20px 60px 40px rgba(0, 0, 0, 0.5333333333), 40px -40px 0 130px #333333,
+                40px -40px 120px 100px rgba(0, 0, 0, 0.5333333333), 60px -60px 0 240px #282828,
                 60px -60px 240px 200px rgba(0, 0, 0, 0.5333333333);
         }
         &::after {
             top: 20px;
             right: 20px;
-            box-shadow: 0 0 5px 0px rgba(0, 0, 0, 0.5333333333), 0 0 0 60px #5aa0ff,
-                0 0 60px 40px rgba(0, 0, 0, 0.5333333333), 0 0 0 130px #519dff,
-                0 0 120px 100px rgba(0, 0, 0, 0.5333333333), 0 0 0 240px #4193ff,
+            // box-shadow: 0 0 5px 0px rgba(0, 0, 0, 0.5333333333), 0 0 0 60px #5aa0ff,
+            //     0 0 60px 40px rgba(0, 0, 0, 0.5333333333), 0 0 0 130px #519dff,
+            //     0 0 120px 100px rgba(0, 0, 0, 0.5333333333), 0 0 0 240px #4193ff,
+            //     0 0 240px 200px rgba(0, 0, 0, 0.5333333333);
+            box-shadow: 0 0 5px 0px rgba(0, 0, 0, 0.5333333333), 0 0 0 60px #424242,
+                0 0 60px 40px rgba(0, 0, 0, 0.5333333333), 0 0 0 130px #333333,
+                0 0 120px 100px rgba(0, 0, 0, 0.5333333333), 0 0 0 240px #282828,
                 0 0 240px 200px rgba(0, 0, 0, 0.5333333333);
         }
     }
@@ -44,17 +54,24 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        box-shadow: 0px 0px 15px #0008;
+        box-shadow: inset 0px 0px 15px 8px #0008;
         z-index: 2;
         .login-img {
             height: 100%;
             width: 50%;
-            background-color: #e0edfe;
+            background-color: #878787;
             object-fit: cover;
         }
         .login-form {
             .login-title {
-                color: #010b6c;
+                color: $dark-blue;
+            }
+            .form-control {
+                height: 3rem;
+                font-size: 1.1rem;
+            }
+            .login-btn {
+                font-size: 1.1rem;
             }
         }
     }

@@ -1,0 +1,42 @@
+@import "../../variables.scss";
+
+.steps-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    .filler-line {
+        flex: 1;
+        height: 1px;
+        background-color: grey;
+        display: block;
+        margin: 0px 10px;
+    }
+    .step-wrapper {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 5px;
+        &.active {
+            .step-number {
+                background-color: $secondary-blue;
+            }
+        }
+        &.completed {
+            .step-number {
+                background-color: #4bb543;
+            }
+        }
+        .step-number {
+            background-color: grey;
+            color: $white;
+            border-radius: 50%;
+            display: block;
+            height: 2rem;
+            width: 2rem;
+            font-size: 1.2rem;
+        }
+        .step-title {
+        }
+    }
+}

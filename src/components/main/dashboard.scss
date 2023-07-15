@@ -1,0 +1,11 @@
+@import "../../variables.scss";
+
+.dashboard-container {
+    .cards-container {
+        .card {
+            .card-title {
+                color: $dark-blue;
+            }
+        }
+    }
+}
