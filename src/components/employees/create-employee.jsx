@@ -141,11 +141,9 @@ const CreateUserComponent = (props) => {
         }).catch((e) => {
             console.error(e);
             toast.error("Something went wrong")
-        })
-
-        setTimeout(() => {
+        }).finally(() => {
             setLoaderFlag(false);
-        }, 5000);
+        })
     }
 
     return (
@@ -475,7 +473,7 @@ const CreateUserComponent = (props) => {
                                 Back
                             </Button>
                             <Button
-                                // disabled={!references?.every((e) => Object.values(e)?.every((v) => !!v))}
+                                disabled={!references?.every((e) => Object.values(e)?.every((v) => !!v))}
                                 variant='primary'
                                 className='ms-2'
                                 onClick={() => setCurrentStep(3)}>Next</Button>
