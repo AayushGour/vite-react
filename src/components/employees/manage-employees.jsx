@@ -87,9 +87,9 @@ const ManageUserComponent = (props) => {
         <div className="manage-employees-container h-100 w-100 py-4 px-5">
             <SecondaryHeader
                 title="Manage Employees"
-                extraDetails={
-                    <Button onClick={() => navigate("/manage-employees/create-user")}>Add Employee</Button>
-                }
+            // extraDetails={
+            //     <Button onClick={() => navigate("/manage-employees/create-user")}>Add Employee</Button>
+            // }
             />
             <Table
                 className='w-100'

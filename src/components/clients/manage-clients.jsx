@@ -75,9 +75,9 @@ const ManageClientsComponent = (props) => {
         <div className="manage-clients-container h-100 w-100 py-4 px-5">
             <SecondaryHeader
                 title="Manage Clients"
-                extraDetails={
-                    <Button onClick={() => navigate("/manage-clients/create-client")}>Create Client</Button>
-                }
+            // extraDetails={
+            //     <Button onClick={() => navigate("/manage-clients/create-client")}>Create Client</Button>
+            // }
             />
             <Table
                 className='w-100'

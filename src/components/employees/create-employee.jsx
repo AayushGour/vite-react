@@ -148,7 +148,7 @@ const CreateUserComponent = (props) => {
 
     return (
         <div className="create-user-container h-100 w-100 px-5 py-4">
-            <SecondaryHeader goBack title="Add Employee" />
+            <SecondaryHeader title="Add Employee" />
             <StepsComponent currentStep={currentStep} steps={formSteps} className="mt-3 mx-3" />
             {(role === rolesList.ADMIN || role === rolesList.SUPERADMIN) && currentStep === 1 ?
                 <div className='w-100 text-start mx-3 mt-4 mb-3'>

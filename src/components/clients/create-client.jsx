@@ -81,7 +81,7 @@ const CreateClientComponent = (props) => {
     };
     return (
         <div className="create-client-container px-5 py-4 h-100 w-auto position-relative">
-            <SecondaryHeader title="Create Client" goBack />
+            <SecondaryHeader title="Create Client" />
             <StepsComponent currentStep={currentStep} steps={formSteps} className="mt-3 mx-3" />
             <Form className='mt-4 d-flex flex-row flex-wrap gap-3 pb-4' noValidate validated={validated} onSubmit={handleSubmit}>
                 {currentStep === 1 ?
