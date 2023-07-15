@@ -152,9 +152,10 @@ const CreateUserComponent = (props) => {
         <div className="create-user-container h-100 w-100 p-4">
             <SecondaryHeader goBack title="Add Employee" />
             <StepsComponent currentStep={currentStep} steps={formSteps} className="mt-3 mx-3" />
-            {role === rolesList.ADMIN || role === rolesList.SUPERADMIN ?
-                <div className='w-100 text-start mx-3 mt-3'>
-                    <label>Client</label>
+            {(role === rolesList.ADMIN || role === rolesList.SUPERADMIN) && currentStep === 1 ?
+                <div className='w-100 text-start mx-3 mt-4 mb-3'>
+                    <h4 className='text-start w-100'>Select Client</h4>
+                    <label className='mt-2'>Client</label>
                     <Form.Select
                         className='w-32'
                         value={clientId}

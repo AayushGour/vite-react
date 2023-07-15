@@ -2,17 +2,54 @@ import React, { useEffect, useState } from 'react';
 import { getEmployeesListUrl, getUsersListUrl } from '../utility/api-urls';
 import axios from 'axios';
 import Loader from '../utility/loader';
-import { Button, Table } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import SecondaryHeader from '../utility/secondary-header';
 import { rolesList } from '../utility/constants';
+import { Table } from 'antd';
 
 const ManageUserComponent = (props) => {
     const navigate = useNavigate();
 
     const [loaderFlag, setLoaderFlag] = useState(true);
     const [usersList, setUsersList] = useState([]);
+
+    const columns = [
+        {
+            title: 'Name',
+            dataIndex: 'name',
+            key: 'name',
+            sorter: (a, b) => a?.name?.toLowerCase().localeCompare(b?.name?.toLowerCase()),
+            // render: (text, record) => <Link to={`/manage-clients/${record?._id}`}>{record?.clientName}</Link>
+        },
+        {
+            title: 'Designation',
+            dataIndex: 'designation',
+            key: 'designation',
+            sorter: (a, b) => a?.designation?.toLowerCase().localeCompare(b?.designation?.toLowerCase()),
+        },
+        {
+            title: 'Client Name',
+            dataIndex: 'clientName',
+            key: 'clientName',
+            sorter: (a, b) => a?.clientName?.toLowerCase().localeCompare(b?.clientName?.toLowerCase()),
+        },
+        {
+            title: 'Date of Birth',
+            dataIndex: 'dob',
+            sorter: (a, b) => new Date(a?.dob) - new Date(b?.dob),
+            key: 'dob',
+        },
+        {
+            title: 'Creation Date',
+            dataIndex: 'createdDate',
+            key: 'createdDate',
+            sorter: (a, b) => new Date(a?.createdDate) - new Date(b?.createdDate),
+            render: (text) => new Date(text).toLocaleDateString()
+        },
+    ];
+
     const role = localStorage.getItem('roles');
     useEffect(() => {
         getUsersList();
@@ -35,7 +72,7 @@ const ManageUserComponent = (props) => {
             params: params
         }
         axios(config).then((resp) => {
-            setUsersList(resp?.data?.data?.employeeList)
+            setUsersList(resp?.data?.data?.employeeList?.map((dat) => ({ clientName: dat?.clientName, ...dat?.employeeData })))
         }).catch((e) => {
             console.error(e);
             toast.error(e?.response?.message);
@@ -54,8 +91,13 @@ const ManageUserComponent = (props) => {
                     <Button onClick={() => navigate("/manage-employees/create-user")}>Add Employee</Button>
                 }
             />
-
-            <Table className='users-table mt-3' striped bordered>
+            <Table
+                className='w-100'
+                bordered
+                columns={columns}
+                dataSource={usersList}
+            />
+            {/* <Table className='users-table mt-3' striped bordered>
                 <thead>
                     <tr>
                         <th className='text-start ps-3'>Name</th>
@@ -76,7 +118,7 @@ const ManageUserComponent = (props) => {
                         </tr>
                     })}
                 </tbody>
-            </Table>
+            </Table> */}
         </div>
     )
 }
