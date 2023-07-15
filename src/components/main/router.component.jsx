@@ -10,6 +10,7 @@ import CreateUserComponent from '../employees/create-employee';
 import DashboardComponent from './dashboard';
 import SignupComponent from './signup';
 import AttendanceComponent from './attendance';
+import ViewEmployeeComponent from '../employees/view-employee';
 
 const RouterComponent = (props) => {
     return (
@@ -20,6 +21,7 @@ const RouterComponent = (props) => {
                 <Route path="" element={<DashboardComponent />} />
                 <Route path="manage-employees" >
                     <Route path="" element={<ManageUserComponent />} />
+                    <Route path=":id" element={<ViewEmployeeComponent />} />
                     <Route path="create-user" element={<CreateUserComponent />} />
                 </Route>
                 <Route path="manage-clients" >

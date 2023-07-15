@@ -8,5 +8,6 @@ export const getEmployeesListUrl = BASE_URL + "api/v1/get-all-employees";
 export const getClientsListUrl = BASE_URL + "api/v1/get-all-clients";
 export const createClientUrl = BASE_URL + "api/v1/create-client";
 export const getClientByIdUrl = BASE_URL + "api/v1/get-client";
+export const getEmployeeByIdUrl = BASE_URL + "api/v1/get-employee";
 export const createEmployeeUrl = BASE_URL + "api/v1/create-employee";
 export const getDashboardDataUrl = BASE_URL + "api/v1/dashboard";
