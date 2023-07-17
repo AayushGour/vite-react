@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import "./login.scss";
-import LoginImg from "../../assets/img/login-img-2.png";
+import LoginImg from "../../assets/img/login-img-2.jpg";
 import ECLogo from "../../assets/img/ec-logo.png";
 import { Button, Form, Spinner } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';

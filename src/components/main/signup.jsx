@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { Button, Form, Spinner } from 'react-bootstrap';
 import ECLogo from "../../assets/img/ec-logo.png";
-import LoginImg from "../../assets/img/login-img-2.png";
+import LoginImg from "../../assets/img/login-img-2.jpg";
 import { Link, useNavigate } from 'react-router-dom';
 import "./login.scss";
 import { signUpUrl } from '../utility/api-urls';
@@ -130,7 +130,7 @@ const SignupComponent = (props) => {
                     </Button>
                     <div className="w-100 text-center">
                         <span>Already have an account?</span>
-                        <Link to="login">Login</Link>
+                        <Link className='ms-2' to="login">Login</Link>
                     </div>
                 </Form>
             </div>
