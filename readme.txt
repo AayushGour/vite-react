@@ -1,3 +1,10 @@
+15-Jul-2023 10:22:27
+employee is not related to client
+client can be changed
+attendance should be marked according to 
+
+
+
 add heading to select client
 add draft feature
 client aggregation
