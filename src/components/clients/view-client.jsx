@@ -23,11 +23,6 @@ const ViewClientComponent = (props) => {
         },
         {
             key: '2',
-            label: `Insurance Form`,
-            children: <EmployeeInsuranceForm />,
-        },
-        {
-            key: '3',
             label: `Tab 3`,
             children: `Content of Tab Pane 3`,
         },

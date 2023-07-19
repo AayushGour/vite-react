@@ -54,3 +54,39 @@
 .card {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 255, 0.1);
 }
+
+.fs-1rem {
+    font-size: 1rem;
+}
+.fs-1_2rem {
+    font-size: 1.2rem;
+}
+
+.details-form.ant-form {
+    padding: 0px 0px 3rem;
+    .ant-form-item-label {
+        width: 15%;
+        text-align: start;
+        label {
+            font-size: 1rem;
+        }
+    }
+    .ant-form-item.editable-table-wrapper {
+        .ant-form-item-control {
+            max-width: 100%;
+        }
+    }
+    .ant-form-item-control {
+        width: 40%;
+        max-width: 40%;
+        input {
+            font-size: 1rem;
+        }
+        .ant-select {
+            .ant-select-selection-item {
+                text-align: left;
+                font-size: 1rem;
+            }
+        }
+    }
+}

@@ -20,7 +20,10 @@ const refreshToken = async () => {
         url: refreshTokenUrl,
         params: { refreshToken }
     }
-    return axios(config);
+    return axios(config).then((resp) => {
+        sessionStorage.setItem('counter', 0);
+        return resp;
+    });
 }
 
 axios.interceptors.response.use((response) => {
