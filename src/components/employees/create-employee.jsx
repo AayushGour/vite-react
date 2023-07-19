@@ -30,6 +30,7 @@ const CreateUserComponent = (props) => {
     const [aadharNumber, setAadharNumber] = useState('');
     const [idMarks, setIdMarks] = useState('');
     const [maritalStatus, setMaritalStatus] = useState('');
+    const [sex, setSex] = useState('');
     const [nomineeName, setNomineeName] = useState('');
     const [nomineeRelation, setNomineeRelation] = useState('');
     const [references, setReferences] = useState([
@@ -108,6 +109,7 @@ const CreateUserComponent = (props) => {
         formData.append("guardian", guardian)
         formData.append("contactNumber", contactNumber)
         formData.append("dob", dob)
+        formData.append("sex", sex)
         formData.append("designation", designation)
         formData.append("qualification", qualification)
         formData.append("experience", experience)
@@ -342,6 +344,19 @@ const CreateUserComponent = (props) => {
                                 <option value="In a domestic partnership">In a domestic partnership</option>
                                 <option value="Civil union">Civil union</option>
                                 <option value="Annulled">Annulled</option>
+                            </Form.Control>
+                        </Form.Group>
+                        <Form.Group className='text-start w-32' controlId="maritalStatus">
+                            <Form.Label>Sex</Form.Label>
+                            <Form.Control
+                                as="select"
+                                value={sex}
+                                onChange={(e) => setSex(e?.target?.value)}
+                            >
+                                <option value="">Choose...</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
                             </Form.Control>
                         </Form.Group>
                         <Form.Group className='text-start w-49' controlId="nomineeName">
