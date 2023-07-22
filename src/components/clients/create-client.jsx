@@ -6,8 +6,11 @@ import Loader from '../utility/loader';
 import { createClientUrl } from '../utility/api-urls';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const CreateClientComponent = (props) => {
+    const navigate = useNavigate();
+
     const [clientName, setClientName] = useState('');
     const [billingAddress, setBillingAddress] = useState('');
     const [street, setStreet] = useState('');
@@ -65,6 +68,7 @@ const CreateClientComponent = (props) => {
                 contactEmail,
                 contactNumber,
                 password,
+                agencyId: localStorage.getItem("agencyId")
             },
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -72,6 +76,7 @@ const CreateClientComponent = (props) => {
         }
         axios(config).then((resp) => {
             toast.success(resp?.data?.data?.message);
+            navigate("/manage-clients");
         }).catch((e) => {
             console.error(e);
             toast.error(e?.response?.data?.message);
@@ -81,7 +86,7 @@ const CreateClientComponent = (props) => {
     };
     return (
         <div className="create-client-container px-5 py-4 h-100 w-auto position-relative">
-            <SecondaryHeader title="Create Client" />
+            <SecondaryHeader title="Onboard Client" />
             <StepsComponent currentStep={currentStep} steps={formSteps} className="mt-3 mx-3" />
             <Form className='mt-4 d-flex flex-row flex-wrap gap-3 pb-4' noValidate validated={validated} onSubmit={handleSubmit}>
                 {currentStep === 1 ?

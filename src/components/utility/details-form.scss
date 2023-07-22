@@ -1,0 +1,34 @@
+@import "../../variables.scss";
+
+.details-form.ant-form {
+    padding: 0px 0px 3rem;
+    .ant-form-item-label {
+        width: 20%;
+        text-align: start;
+        label {
+            font-size: 1rem;
+        }
+    }
+    .ant-form-item.editable-table-wrapper {
+        .ant-form-item-control {
+            max-width: 100%;
+        }
+    }
+    .ant-form-item-control {
+        width: 40%;
+        margin-bottom: 10px;
+        max-width: 40%;
+        .ant-form-item-explain-error {
+            text-align: start;
+        }
+        input {
+            font-size: 1rem;
+        }
+        .ant-select {
+            .ant-select-selection-item {
+                text-align: left;
+                font-size: 1rem;
+            }
+        }
+    }
+}

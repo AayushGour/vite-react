@@ -1,3 +1,21 @@
+22-Jul-2023 11:02:39
+Super Admin - Saas Admin
+Admin - Org admin - security agency
+Client - client - hitachi
+employee - employee
+
+Organization -> Agency
+create -> onboard
+
+family edit date
+Branch Office / Dispensary
+insurance number
+employee details update issue
+
+shift can be updated by client only
+
+update employee details apis
+
 15-Jul-2023 10:22:27
 employee is not related to client
 client can be changed

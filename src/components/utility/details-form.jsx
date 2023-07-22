@@ -1,15 +1,12 @@
 import { Button, Form, Input, Select } from 'antd';
 import React, { useEffect, useState } from 'react';
-import EditableTable from './editable-table';
+import EditableTable from './family-editable-table';
+import "./details-form.scss";
 
 const DetailsFormComponent = (props) => {
-    const { onFinish, initialValues, formItems, isEdit, extraButtons } = props;
+    const { onFinish, initialValues, formItems, isEdit, extraButtons, hideEdit } = props;
     const [editMode, setEditMode] = useState(isEdit);
     const [form] = Form.useForm();
-    const initialData = [
-        { id: 1, name: 'John', dob: '1990-01-01', relationship: 'Spouse', residingWith: 'Yes', placeOfResidence: '' },
-        { id: 2, name: 'Jane', dob: '1995-05-05', relationship: 'Child', residingWith: 'No', placeOfResidence: 'New York' }
-    ]
 
     useEffect(() => {
         setEditMode(isEdit);
@@ -29,14 +26,14 @@ const DetailsFormComponent = (props) => {
 
 
     return (
-        <Form className='details-form' onFinish={onFinish} initialValues={initialValues ?? {}}>
+        <Form className='details-form' onFinish={(values) => { onFinish(values); setEditMode(false) }} initialValues={initialValues ?? {}}>
             <div className="w-100 text-end">
-                <Button className='fs-1rem px-3 py-2 h-auto' type="secondary" onClick={() => {
+                {hideEdit ? <></> : <Button className='fs-1rem px-3 py-2 h-auto' type="secondary" onClick={() => {
                     form.resetFields();
                     setEditMode(!editMode)
                 }}>
                     {!editMode ? "Edit" : "Cancel"}
-                </Button>
+                </Button>}
                 {extraButtons?.map((btn, ind) => btn)}
             </div>
             {formItems?.map((formItem, ind) => {
@@ -62,7 +59,11 @@ const DetailsFormComponent = (props) => {
                         inputComponent = <Select className='fs-1rem' options={formItem?.options} />
                         break;
                     case 'table': {
-                        inputComponent = <EditableTable key={formItem?.key} onChange={(e) => console.log(e)} isEdit={editMode} initialData={initialData} />
+                        inputComponent = <EditableTable key={formItem?.key} isEdit={editMode && formItem?.editable} initialData={initialValues?.[formItem?.name]} />
+                        break;
+                    }
+                    case 'custom': {
+                        inputComponent = formItem?.component;
                         break;
                     }
                     default:
@@ -71,20 +72,20 @@ const DetailsFormComponent = (props) => {
 
                 return <Form.Item
                     key={formItem?.key}
-                    rules={editMode ? formItem?.rules : []}
+                    rules={!editMode || !formItem?.editable ? [] : formItem?.rules}
                     label={formItem?.label}
                     name={formItem?.name}
                     className={formItem?.className ?? ""}
                 >
-                    {!editMode ?
+                    {!editMode || !formItem?.editable ?
                         <span className='d-block w-100 fs-1rem text-start'>
-                            {formItem?.type === "datePicker" ? new Date(initialValues?.[formItem?.name]).toLocaleDateString() : formItem?.type === "table" ? inputComponent : initialValues?.[formItem?.name] || "-"}</span>
+                            {formItem?.type === "datePicker" ? (!!initialValues?.[formItem?.name] && new Date(initialValues?.[formItem?.name]) !== "Invalid Date" ? new Date(initialValues?.[formItem?.name]).toLocaleDateString() : "-") : formItem?.type === "table" ? inputComponent : initialValues?.[formItem?.name] || "-"}</span>
                         :
                         inputComponent}
                 </Form.Item>
             })}
 
-            <Form.Item style={editMode ? { paddingLeft: "25%" } : {}}>
+            <Form.Item className='w-100' style={editMode ? { paddingLeft: "100%", width: "100%" } : {}}>
                 <div className='d-flex flex-row justify-content-end gap-3 align-items-center w-100'>
 
                     {editMode ?

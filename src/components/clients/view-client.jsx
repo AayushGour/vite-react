@@ -21,11 +21,6 @@ const ViewClientComponent = (props) => {
             label: `Client Details`,
             children: <ClientDetailsComponent />,
         },
-        {
-            key: '2',
-            label: `Tab 3`,
-            children: `Content of Tab Pane 3`,
-        },
     ];
 
     return (

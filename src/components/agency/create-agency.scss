@@ -1,0 +1,32 @@
+@import "../../variables.scss";
+
+.create-org-container {
+    .create-org-form {
+        margin-top: 20px;
+        .ant-form-item {
+            .ant-form-item-label {
+                width: 15%;
+                text-align: start;
+                label {
+                    font-size: 1rem;
+                }
+            }
+            .ant-form-item-control {
+                width: 50%;
+                max-width: 50%;
+                input,
+                textarea {
+                    font-size: 1rem;
+                }
+            }
+            &.btn-container {
+                width: 65%;
+                .ant-form-item-control {
+                    width: 100%;
+                    max-width: 100%;
+                    text-align: end;
+                }
+            }
+        }
+    }
+}

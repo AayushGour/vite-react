@@ -35,8 +35,8 @@ const LoginComponent = (props) => {
                 localStorage.setItem('refreshToken', data?.refreshToken);
                 localStorage.setItem('roles', data?.roles);
                 sessionStorage.setItem('counter', 0);
-                if (data?.clientId) {
-                    localStorage.setItem('clientId', data?.clientId);
+                if (data?.agencyId) {
+                    localStorage.setItem('agencyId', data?.agencyId);
                 }
                 navigate('/')
             }).catch((e) => {

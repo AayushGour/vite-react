@@ -17,11 +17,6 @@ const ViewEmployeeComponent = (props) => {
             label: `Insurance Form`,
             children: <EmployeeInsuranceForm />,
         },
-        {
-            key: '3',
-            label: `Tab 3`,
-            children: `Content of Tab Pane 3`,
-        },
     ];
 
     return (

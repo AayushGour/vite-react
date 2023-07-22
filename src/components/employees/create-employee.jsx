@@ -9,6 +9,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { rolesList } from '../utility/constants';
+import EditableTable from '../utility/family-editable-table';
 
 const CreateUserComponent = (props) => {
     const navigate = useNavigate();
@@ -28,15 +29,19 @@ const CreateUserComponent = (props) => {
     const [presentAddress, setPresentAddress] = useState('');
     const [languages, setLanguages] = useState('');
     const [aadharNumber, setAadharNumber] = useState('');
+    const [panNumber, setPanNumber] = useState('');
     const [idMarks, setIdMarks] = useState('');
     const [maritalStatus, setMaritalStatus] = useState('');
     const [sex, setSex] = useState('');
     const [nomineeName, setNomineeName] = useState('');
     const [nomineeRelation, setNomineeRelation] = useState('');
+    const [nomineeDob, setNomineeDob] = useState('');
+    const [oldEsiNumber, setOldEsiNumber] = useState('');
     const [references, setReferences] = useState([
         { index: 1, name: "", occupation: "", address: "" },
         { index: 2, name: "", occupation: "", address: "" },
-    ])
+    ]);
+    const [familyDetails, setFamilyDetails] = useState([]);
     const [filesList, setFilesList] = useState([]);
     const [clientsList, setClientsList] = useState([]);
     const [clientId, setClientId] = useState(localStorage.getItem('clientId') || "");
@@ -87,6 +92,10 @@ const CreateUserComponent = (props) => {
         },
         {
             index: 3,
+            title: "Family Details"
+        },
+        {
+            index: 4,
             title: "Biometric Information"
         }
     ]
@@ -117,11 +126,20 @@ const CreateUserComponent = (props) => {
         formData.append("presentAddress", presentAddress)
         formData.append("languages", languages)
         formData.append("aadharNumber", aadharNumber)
+        formData.append("panNumber", panNumber)
         formData.append("idMarks", idMarks)
         formData.append("maritalStatus", maritalStatus)
         formData.append("nomineeName", nomineeName)
         formData.append("nomineeRelation", nomineeRelation)
-        formData.append("clientId", clientId)
+        formData.append("nomineeDob", nomineeDob)
+        formData.append("agencyId", localStorage.getItem('agencyId'))
+        // formData.append("clientId", clientId)
+        if (familyDetails?.length === 1) {
+            formData?.append('familyDetails', JSON.stringify({}));
+        }
+        familyDetails?.map((fam) => {
+            formData.append("familyDetails", JSON.stringify(fam))
+        })
 
         references?.forEach((ref) => {
             formData.append('references', JSON.stringify(ref))
@@ -150,9 +168,9 @@ const CreateUserComponent = (props) => {
 
     return (
         <div className="create-user-container h-100 w-100 px-5 py-4">
-            <SecondaryHeader title="Add Employee" />
+            <SecondaryHeader title="Onboard Employee" />
             <StepsComponent currentStep={currentStep} steps={formSteps} className="mt-3 mx-3" />
-            {(role === rolesList.ADMIN || role === rolesList.SUPERADMIN) && currentStep === 1 ?
+            {/* {(role === rolesList.ADMIN || role === rolesList.SUPERADMIN) && currentStep === 1 ?
                 <div className='w-100 text-start mx-3 mt-4 mb-3'>
                     <h4 className='text-start w-100'>Select Client</h4>
                     <label className='mt-2'>Client</label>
@@ -168,14 +186,14 @@ const CreateUserComponent = (props) => {
                     </Form.Select>
                 </div>
                 : <></>
-            }
+            } */}
             <Form className='mt-4 d-flex flex-row flex-wrap gap-3 pb-4 gap-3 px-3' noValidate validated={validated} onSubmit={handleSubmit}>
                 {currentStep === 1 ?
 
                     <>
                         <h4 className='text-start w-100'>Personal Information</h4>
                         <Form.Group className='text-start w-32' controlId="employeeName">
-                            <Form.Label>Name</Form.Label>
+                            <Form.Label>Name <span className='color-red'>*</span></Form.Label>
                             <Form.Control
                                 type="text"
                                 value={name}
@@ -188,7 +206,7 @@ const CreateUserComponent = (props) => {
                         </Form.Group>
 
                         <Form.Group className='text-start w-32' controlId="guardianName">
-                            <Form.Label>Father's / Husband's Name</Form.Label>
+                            <Form.Label>Father's / Husband's Name <span className='color-red'>*</span></Form.Label>
                             <Form.Control
                                 type="text"
                                 value={guardian}
@@ -201,7 +219,7 @@ const CreateUserComponent = (props) => {
                         </Form.Group>
 
                         <Form.Group className='text-start w-32' controlId="contactNumber">
-                            <Form.Label>Contact Number</Form.Label>
+                            <Form.Label>Contact Number <span className='color-red'>*</span></Form.Label>
                             <Form.Control
                                 type="number"
                                 value={contactNumber}
@@ -216,7 +234,7 @@ const CreateUserComponent = (props) => {
                         </Form.Group>
 
                         <Form.Group className='text-start w-32' controlId="dobCalendar">
-                            <Form.Label>Date of Birth</Form.Label>
+                            <Form.Label>Date of Birth <span className='color-red'>*</span></Form.Label>
                             <Form.Control
                                 type="date"
                                 value={dob}
@@ -229,7 +247,7 @@ const CreateUserComponent = (props) => {
                         </Form.Group>
 
                         <Form.Group className='text-start w-32' controlId="designationSelect">
-                            <Form.Label>Select Designation</Form.Label>
+                            <Form.Label>Select Designation <span className='color-red'>*</span></Form.Label>
                             <Form.Control
                                 as="select"
                                 value={designation}
@@ -243,7 +261,7 @@ const CreateUserComponent = (props) => {
                             </Form.Control>
                         </Form.Group>
                         <Form.Group className='text-start w-32' controlId="qualification">
-                            <Form.Label>Qualification</Form.Label>
+                            <Form.Label>Qualification <span className='color-red'>*</span></Form.Label>
                             <Form.Control
                                 type="text"
                                 value={qualification}
@@ -255,7 +273,7 @@ const CreateUserComponent = (props) => {
                             </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group className='text-start w-49' controlId="experience">
-                            <Form.Label>Experience</Form.Label>
+                            <Form.Label>Experience <span className='color-red'>*</span></Form.Label>
                             <Form.Control
                                 as="textarea"
                                 value={experience}
@@ -267,7 +285,7 @@ const CreateUserComponent = (props) => {
                             </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group className='text-start w-49' controlId="idMarks">
-                            <Form.Label>Identification Marks</Form.Label>
+                            <Form.Label>Identification Marks <span className='color-red'>*</span></Form.Label>
                             <Form.Control
                                 as="textarea"
                                 value={idMarks}
@@ -279,7 +297,7 @@ const CreateUserComponent = (props) => {
                             </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group className='text-start w-49' controlId="permanentAddress">
-                            <Form.Label>Permanent Address</Form.Label>
+                            <Form.Label>Permanent Address <span className='color-red'>*</span></Form.Label>
                             <Form.Control
                                 as="textarea"
                                 value={permanentAddress}
@@ -291,7 +309,7 @@ const CreateUserComponent = (props) => {
                             </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group className='text-start w-49' controlId="presentAddress">
-                            <Form.Label>Present Address</Form.Label>
+                            <Form.Label>Present Address <span className='color-red'>*</span></Form.Label>
                             <Form.Control
                                 as="textarea"
                                 value={presentAddress}
@@ -303,7 +321,7 @@ const CreateUserComponent = (props) => {
                             </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group className='text-start w-32' controlId="languagesKnown">
-                            <Form.Label>Languages Known</Form.Label>
+                            <Form.Label>Languages Known <span className='color-red'>*</span></Form.Label>
                             <Form.Control
                                 type="text"
                                 value={languages}
@@ -315,7 +333,7 @@ const CreateUserComponent = (props) => {
                             </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group className='text-start w-32' controlId="aadhaarnumber">
-                            <Form.Label>Aadhar Number</Form.Label>
+                            <Form.Label>Aadhar Number <span className='color-red'>*</span></Form.Label>
                             <Form.Control
                                 type="text"
                                 value={aadharNumber}
@@ -326,9 +344,34 @@ const CreateUserComponent = (props) => {
                                 Please provide aadhar number.
                             </Form.Control.Feedback>
                         </Form.Group>
+                        <Form.Group className='text-start w-32' controlId="panNumber">
+                            <Form.Label>PAN Number <span className='color-red'>*</span></Form.Label>
+                            <Form.Control
+                                type="text"
+                                value={panNumber}
+                                onChange={(e) => setPanNumber(e.target.value)}
+                                required
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                Please provide PAN number.
+                            </Form.Control.Feedback>
+                        </Form.Group>
 
-                        <Form.Group className='text-start w-32' controlId="maritalStatus">
-                            <Form.Label>Marital Status</Form.Label>
+                        <Form.Group className='text-start w-49' controlId="maritalStatus">
+                            <Form.Label>Sex <span className='color-red'>*</span></Form.Label>
+                            <Form.Control
+                                as="select"
+                                value={sex}
+                                onChange={(e) => setSex(e?.target?.value)}
+                            >
+                                <option value="">Choose...</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </Form.Control>
+                        </Form.Group>
+                        <Form.Group className='text-start w-49' controlId="maritalStatus">
+                            <Form.Label>Marital Status <span className='color-red'>*</span></Form.Label>
                             <Form.Control
                                 as="select"
                                 value={maritalStatus}
@@ -346,21 +389,8 @@ const CreateUserComponent = (props) => {
                                 <option value="Annulled">Annulled</option>
                             </Form.Control>
                         </Form.Group>
-                        <Form.Group className='text-start w-32' controlId="maritalStatus">
-                            <Form.Label>Sex</Form.Label>
-                            <Form.Control
-                                as="select"
-                                value={sex}
-                                onChange={(e) => setSex(e?.target?.value)}
-                            >
-                                <option value="">Choose...</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                                <option value="other">Other</option>
-                            </Form.Control>
-                        </Form.Group>
-                        <Form.Group className='text-start w-49' controlId="nomineeName">
-                            <Form.Label>Nominee</Form.Label>
+                        <Form.Group className='text-start w-32' controlId="nomineeName">
+                            <Form.Label>Nominee <span className='color-red'>*</span></Form.Label>
                             <Form.Control
                                 type="text"
                                 value={nomineeName}
@@ -371,8 +401,8 @@ const CreateUserComponent = (props) => {
                                 Please provide a nominee.
                             </Form.Control.Feedback>
                         </Form.Group>
-                        <Form.Group className='text-start w-49' controlId="nomineeRelation">
-                            <Form.Label>Relationship with nominee</Form.Label>
+                        <Form.Group className='text-start w-32' controlId="nomineeRelation">
+                            <Form.Label>Relationship with nominee <span className='color-red'>*</span></Form.Label>
                             <Form.Control
                                 type="text"
                                 value={nomineeRelation}
@@ -382,6 +412,27 @@ const CreateUserComponent = (props) => {
                             <Form.Control.Feedback type="invalid">
                                 Please provide a nominee relation.
                             </Form.Control.Feedback>
+                        </Form.Group>
+
+                        <Form.Group className='text-start w-32' controlId="dobCalendar">
+                            <Form.Label>Date of Birth of Nominee <span className='color-red'>*</span></Form.Label>
+                            <Form.Control
+                                type="date"
+                                value={nomineeDob}
+                                onChange={(e) => setNomineeDob(e.target.value)}
+                                required
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                Please provide date of birth of nominee.
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                        <Form.Group className='text-start w-32' controlId="nomineeName">
+                            <Form.Label>Old ESI Number (Optional)</Form.Label>
+                            <Form.Control
+                                type="text"
+                                value={oldEsiNumber}
+                                onChange={(e) => setOldEsiNumber(e.target.value)}
+                            />
                         </Form.Group>
                         <div className="w-100 mt-3 text-end">
                             <Button type='primary'
@@ -394,13 +445,15 @@ const CreateUserComponent = (props) => {
                                     qualification === "" ||
                                     experience === "" ||
                                     idMarks === "" ||
+                                    sex === "" ||
                                     permanentAddress === "" ||
                                     presentAddress === "" ||
                                     languages === "" ||
                                     aadharNumber === "" ||
                                     maritalStatus === "" ||
                                     nomineeName === "" ||
-                                    nomineeRelation === ""
+                                    nomineeRelation === "" ||
+                                    nomineeDob === ""
                                 }
                                 onClick={() => setCurrentStep(2)}>Next</Button>
                         </div>
@@ -411,7 +464,7 @@ const CreateUserComponent = (props) => {
                         <span className='text-start w-100'>Please provide the details of 2 of your neighbours as references.</span>
                         <h6 className='text-start w-100'>Reference 1</h6>
                         <Form.Group className='text-start w-32' controlId="refName1">
-                            <Form.Label>Reference Name</Form.Label>
+                            <Form.Label>Reference Name <span className='color-red'>*</span></Form.Label>
                             <Form.Control
                                 type="text"
                                 value={references?.find((e) => e?.index === 1).name}
@@ -423,7 +476,7 @@ const CreateUserComponent = (props) => {
                             </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group className='text-start w-32' controlId="refocc1">
-                            <Form.Label>Occupation</Form.Label>
+                            <Form.Label>Occupation <span className='color-red'>*</span></Form.Label>
                             <Form.Control
                                 type="text"
                                 value={references?.find((e) => e?.index === 1).occupation}
@@ -435,7 +488,7 @@ const CreateUserComponent = (props) => {
                             </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group className='text-start w-65 me-5' controlId="refAdd1">
-                            <Form.Label>Reference Address</Form.Label>
+                            <Form.Label>Reference Address <span className='color-red'>*</span></Form.Label>
                             <Form.Control
                                 as="textarea"
                                 value={references?.find((e) => e?.index === 1).address}
@@ -448,7 +501,7 @@ const CreateUserComponent = (props) => {
                         </Form.Group>
                         <h6 className='text-start w-100'>Reference 2</h6>
                         <Form.Group className='text-start w-32' controlId="refName2">
-                            <Form.Label>Reference Name</Form.Label>
+                            <Form.Label>Reference Name <span className='color-red'>*</span></Form.Label>
                             <Form.Control
                                 type="text"
                                 value={references?.find((e) => e?.index === 2).name}
@@ -460,7 +513,7 @@ const CreateUserComponent = (props) => {
                             </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group className='text-start w-32' controlId="refocc2">
-                            <Form.Label>Occupation</Form.Label>
+                            <Form.Label>Occupation <span className='color-red'>*</span></Form.Label>
                             <Form.Control
                                 type="text"
                                 value={references?.find((e) => e?.index === 2).occupation}
@@ -472,7 +525,7 @@ const CreateUserComponent = (props) => {
                             </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group className='text-start w-65' controlId="refAdd2">
-                            <Form.Label>Reference Address</Form.Label>
+                            <Form.Label>Reference Address <span className='color-red'>*</span></Form.Label>
                             <Form.Control
                                 as="textarea"
                                 value={references?.find((e) => e?.index === 2).address}
@@ -494,37 +547,53 @@ const CreateUserComponent = (props) => {
                                 onClick={() => setCurrentStep(3)}>Next</Button>
                         </div>
                     </>
-                        :
-                        <>
-                            <h4 className='text-start w-100'>Biometric Information</h4>
-                            <span className='text-start w-100'>Please upload images of your thumb impressions.</span>
+                        : currentStep === 3 ?
+                            <>
+                                <h4 className='text-start w-100'>Family Information</h4>
+                                <span className='text-start w-100'>Please enter the following details about your family.</span>
+                                <EditableTable initialData={familyDetails} onChange={(e) => setFamilyDetails(e)} isEdit={true} />
+                                <div className="w-100 mt-3 text-end">
+                                    <Button variant="secondary" onClick={() => setCurrentStep(2)}>
+                                        Back
+                                    </Button>
+                                    <Button
+                                        disabled={!references?.every((e) => Object.values(e)?.every((v) => !!v))}
+                                        variant='primary'
+                                        className='ms-2'
+                                        onClick={() => setCurrentStep(4)}>Next</Button>
+                                </div>
+                            </>
+                            :
+                            <>
+                                <h4 className='text-start w-100'>Biometric Information</h4>
+                                <span className='text-start w-100'>Please upload images of your thumb impressions.</span>
 
-                            <h6 className='text-start w-100'>Left Hand Thumb Impressions</h6>
-                            <UploadComponent className="w-32" index={1} handleFileSelect={handleFileSelect} />
-                            <UploadComponent className="w-32" index={2} handleFileSelect={handleFileSelect} />
-                            <UploadComponent className="w-32" index={3} handleFileSelect={handleFileSelect} />
-                            <h6 className='text-start w-100'>Right Hand Thumb Impressions</h6>
-                            <UploadComponent className="w-32" index={4} handleFileSelect={handleFileSelect} />
-                            <UploadComponent className="w-32" index={5} handleFileSelect={handleFileSelect} />
-                            <UploadComponent className="w-32" index={6} handleFileSelect={handleFileSelect} />
-                            <div className="w-100 mt-3 text-end">
-                                <Button variant="secondary" onClick={() => setCurrentStep(2)}>
-                                    Back
-                                </Button>
-                                <Button
-                                    disabled={filesList?.length !== 6}
-                                    // disabled={
-                                    //     contactPerson === "" ||
-                                    //     contactEmail === "" ||
-                                    //     contactNumber === "" ||
-                                    //     password === ""
-                                    // }
-                                    variant="primary" className='ms-2' type="submit">
-                                    Submit
-                                </Button>
-                            </div>
+                                <h6 className='text-start w-100'>Left Hand Thumb Impressions</h6>
+                                <UploadComponent className="w-32" file={filesList?.find((f) => f?.index === 1)?.file} index={1} handleFileSelect={handleFileSelect} />
+                                <UploadComponent className="w-32" file={filesList?.find((f) => f?.index === 2)?.file} index={2} handleFileSelect={handleFileSelect} />
+                                <UploadComponent className="w-32" file={filesList?.find((f) => f?.index === 3)?.file} index={3} handleFileSelect={handleFileSelect} />
+                                <h6 className='text-start w-100'>Right Hand Thumb Impressions</h6>
+                                <UploadComponent className="w-32" file={filesList?.find((f) => f?.index === 4)?.file} index={4} handleFileSelect={handleFileSelect} />
+                                <UploadComponent className="w-32" file={filesList?.find((f) => f?.index === 5)?.file} index={5} handleFileSelect={handleFileSelect} />
+                                <UploadComponent className="w-32" file={filesList?.find((f) => f?.index === 6)?.file} index={6} handleFileSelect={handleFileSelect} />
+                                <div className="w-100 mt-3 text-end">
+                                    <Button variant="secondary" onClick={() => setCurrentStep(3)}>
+                                        Back
+                                    </Button>
+                                    <Button
+                                        disabled={filesList?.length !== 6}
+                                        // disabled={
+                                        //     contactPerson === "" ||
+                                        //     contactEmail === "" ||
+                                        //     contactNumber === "" ||
+                                        //     password === ""
+                                        // }
+                                        variant="primary" className='ms-2' type="submit">
+                                        Submit
+                                    </Button>
+                                </div>
 
-                        </>}
+                            </>}
             </Form>
             {loaderFlag ? <Loader className="overlay" /> : <></>}
         </div >

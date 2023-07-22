@@ -4,10 +4,10 @@ import "./upload-component.scss";
 import { toast } from "react-toastify";
 
 const UploadComponent = (props) => {
-    const { index, handleFileSelect, className } = props;
-    const [selectedFile, setSelectedFile] = useState(null);
+    const { index, handleFileSelect, className, file } = props;
+    const [selectedFile, setSelectedFile] = useState(file ?? null);
     const [dragging, setDragging] = useState(false);
-    const [previewImage, setPreviewImage] = useState(null);
+    const [previewImage, setPreviewImage] = useState(file ? URL.createObjectURL(file) : null);
 
     const handleDragOver = (event) => {
         event.preventDefault();
@@ -22,7 +22,7 @@ const UploadComponent = (props) => {
         event.preventDefault();
         setDragging(false);
         const file = event.dataTransfer.files[0];
-        if (file.type.startsWith("image/")) {
+        if (file?.type?.startsWith("image/")) {
             setSelectedFile(file);
             setPreviewImage(URL.createObjectURL(file));
             handleFileSelect(index, file);
@@ -33,7 +33,7 @@ const UploadComponent = (props) => {
 
     const handleFileSelection = (event) => {
         const file = event.target.files[0];
-        if (file.type.startsWith("image/")) {
+        if (file?.type?.startsWith("image/")) {
             setSelectedFile(file);
             setPreviewImage(URL.createObjectURL(file));
             handleFileSelect(index, file);

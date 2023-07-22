@@ -7,7 +7,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { getEmployeeInsuranceByIdUrl, updateEmployeeInsuranceUrl } from '../utility/api-urls';
 import Loader from '../utility/loader';
-import EditableTable from '../utility/editable-table';
+import EditableTable from '../utility/family-editable-table';
 
 const EmployeeInsuranceForm = (props) => {
     const params = useParams();
@@ -50,8 +50,30 @@ const EmployeeInsuranceForm = (props) => {
             }
         }
         axios(config)?.then((resp) => {
-            const processedData = Object.assign({}, resp?.data?.data, { dob: new Date(resp?.data?.data?.dob)?.toISOString().split("T")[0] });
-            setInitialValues(processedData);
+            const { employeeDetails, insuranceDetails } = resp?.data?.data;
+            const proData = {
+                name: employeeDetails?.name,
+                guardian: employeeDetails?.guardian,
+                insuranceNo: insuranceDetails?.insuranceNo,
+                dob: new Date(employeeDetails?.dob)?.toISOString().split("T")[0],
+                sex: employeeDetails.sex,
+                maritalStatus: employeeDetails.maritalStatus,
+                permanentAddress: employeeDetails?.permanentAddress,
+                presentAddress: employeeDetails?.presentAddress,
+                branchOffice: insuranceDetails?.branchOffice,
+                dispensary: insuranceDetails?.dispensary,
+                employerCode: insuranceDetails?.employerCode,
+                appointmentDate: insuranceDetails?.appointmentDate,
+                employersNameAddress: insuranceDetails?.employersNameAddress,
+                nomineeName: employeeDetails?.nomineeName,
+                nomineeRelationship: employeeDetails?.nomineeRelation,
+                nomineeAddress: employeeDetails?.nomineeAddress,
+                nomineeDob: employeeDetails?.nomineeDob,
+                createdDate: employeeDetails?.createdDate,
+                editedDate: employeeDetails?.editedDate,
+                familyDetails: employeeDetails?.familyDetails,
+            }
+            setInitialValues(proData);
         }).catch((e) => {
             console.error(e);
             toast.error(e?.response?.data?.message || "Something went wrong");
@@ -59,18 +81,6 @@ const EmployeeInsuranceForm = (props) => {
             setLoaderFlag(false);
         })
     }
-
-    // const initialValues = {
-    //     insuranceNo: '123456789',
-    //     name: 'John Doe',
-    //     guardianName: 'John Doe Sr.',
-    //     dob: '1990-01-01',
-    //     sex: 'male',
-    //     maritalStatus: 'single',
-    //     permanentAddress: '123 Main St, City',
-    //     presentAddress: '456 Elm St, City',
-    //     branchOffice: 'Bommasandra',
-    // };
 
     const formItems = [
         {
@@ -83,28 +93,32 @@ const EmployeeInsuranceForm = (props) => {
             name: "insuranceNo",
             label: "Insurance No",
             rules: [{ required: true, message: 'Please enter the Insurance No' }],
-            type: "input"
+            type: "input",
+            editable: false,
         },
         {
             key: "name",
             name: "name",
             label: "Name",
             rules: [{ required: true, message: "Please enter the employee's full name" }],
-            type: "input"
+            type: "input",
+            editable: false,
         },
         {
-            key: "guardianName",
-            name: "guardianName",
+            key: "guardian",
+            name: "guardian",
             label: "Father / Husband's Name",
             rules: [{ required: true, message: 'Please enter the father/husband name' }],
-            type: "input"
+            type: "input",
+            editable: false,
         },
         {
             key: "dob",
             name: "dob",
             label: "Date of Birth",
             rules: [{ required: true, message: 'Please enter the Date of Birth' }],
-            type: "datePicker"
+            type: "datePicker",
+            editable: false,
         },
         {
             key: "sex",
@@ -112,6 +126,7 @@ const EmployeeInsuranceForm = (props) => {
             label: "Sex",
             rules: [{ required: true, message: 'Please select the gender' }],
             type: "select",
+            editable: false,
             options: [{ label: "Male", value: "male" }, { label: "Female", value: "female" }]
         },
         {
@@ -120,6 +135,7 @@ const EmployeeInsuranceForm = (props) => {
             label: "Marital Status",
             rules: [{ required: true, message: 'Please select Marital Status' }],
             type: "select",
+            editable: false,
             options: [{ label: "Single", value: "single" }, { label: "Married", value: "married" }, { label: "Divorced", value: "divorced" }, { label: "Widowed", value: "widowed" }]
         },
         {
@@ -128,6 +144,7 @@ const EmployeeInsuranceForm = (props) => {
             label: "Permanent Address",
             rules: [{ required: true, message: 'Please select the Permanent Address' }],
             type: "textarea",
+            editable: false,
         },
         {
             key: "presentAddress",
@@ -135,20 +152,23 @@ const EmployeeInsuranceForm = (props) => {
             label: "Present Address",
             rules: [{ required: true, message: 'Please select the Present Address' }],
             type: "textarea",
+            editable: false,
         },
         {
             key: "branchOffice",
             name: "branchOffice",
-            label: "Branch Office / Dispensary",
-            rules: [{ required: true, message: 'Please enter the Branch Office / Dispensary' }],
-            type: "input"
+            label: "Branch Office",
+            rules: [{ required: true, message: 'Please enter the Branch Office' }],
+            type: "input",
+            editable: true,
         },
         {
             key: "dispensary",
             name: "dispensary",
             label: "Dispensary",
             rules: [{ required: true, message: 'Please enter the Dispensary' }],
-            type: "input"
+            type: "input",
+            editable: true,
         },
         {
             type: "heading",
@@ -160,21 +180,24 @@ const EmployeeInsuranceForm = (props) => {
             name: "employerCode",
             label: "Employer's Code No.",
             rules: [{ required: true, message: 'Please enter Employer\'s Code No.' }],
-            type: "input"
+            type: "input",
+            editable: true,
         },
         {
             key: "appointmentDate",
             name: "appointmentDate",
             label: "Date of Appointment",
             rules: [{ required: true, message: 'Please enter the Date of Appointment' }],
-            type: "datePicker"
+            type: "datePicker",
+            editable: true,
         },
         {
             key: "employersNameAddress",
             name: "employersNameAddress",
-            label: "Name and Address of employer",
+            label: "Name & Address of employer",
             rules: [{ required: true, message: 'Please select the Name and Address of employer' }],
             type: "textarea",
+            editable: true,
         },
         {
             type: "heading",
@@ -186,21 +209,32 @@ const EmployeeInsuranceForm = (props) => {
             name: "nomineeName",
             label: "Name",
             rules: [{ required: true, message: 'Please enter Name of nominee' }],
-            type: "input"
+            type: "input",
+            editable: false,
         },
         {
-            key: "relationship",
-            name: "relationship",
+            key: "nomineeRelationship",
+            name: "nomineeRelationship",
             label: "Relationship",
             rules: [{ required: true, message: 'Please enter relationship' }],
-            type: "input"
+            type: "input",
+            editable: false,
+        },
+        {
+            key: "nomineeDob",
+            name: "nomineeDob",
+            label: "Nominee's Date of birth",
+            rules: [{ required: true, message: 'Please enter Nominee\'s Date of birth' }],
+            type: "datePicker",
+            editable: false,
         },
         {
             key: "nomineeAddress",
             name: "nomineeAddress",
             label: "Address",
             rules: [{ required: true, message: 'Please enter Nominee\'s Address' }],
-            type: "textarea"
+            type: "textarea",
+            editable: false,
         },
         {
             type: "heading",
@@ -211,7 +245,8 @@ const EmployeeInsuranceForm = (props) => {
             key: "familyDetails",
             name: "familyDetails",
             type: "table",
-            className: "w-100 editable-table-wrapper"
+            className: "w-100 editable-table-wrapper",
+            editable: false,
         },
     ]
 

@@ -19,10 +19,10 @@ const DashboardComponent = (props) => {
 
     const getUsersList = () => {
         const params = {};
-        if (role === rolesList.ADMIN || role === rolesList.SUPERADMIN) {
+        if (role === rolesList.SUPERADMIN) {
             params.allData = true;
-        } else {
-            params.clientId = localStorage.getItem('clientId');
+        } else if (role === rolesList.ADMIN) {
+            params.agencyId = localStorage.getItem('agencyId');
         }
         setLoaderFlag(true);
         const config = {
@@ -52,7 +52,7 @@ const DashboardComponent = (props) => {
                         Object.entries(dashboardData)?.map(([key, val]) => ({ key, val: val?.[0]?.count }))?.map((item, index) => {
                             const itemName = item?.key?.replace("Count", "");
                             return <div key={index} className='card w-25'>
-                                <h1 className='card-title'>{item?.val}</h1>
+                                <h1 className='card-title'>{item?.val || 0}</h1>
                                 <h4>{itemName?.charAt(0).toUpperCase() + itemName?.slice(1)}s</h4>
                             </div>
                         })

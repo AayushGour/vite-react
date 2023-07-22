@@ -1,19 +1,43 @@
 import React, { useEffect, useState } from 'react';
-import { getEmployeesListUrl, getUsersListUrl } from '../utility/api-urls';
+import { deleteEmployeeByIdUrl, getEmployeesListUrl, getUsersListUrl } from '../utility/api-urls';
 import axios from 'axios';
 import Loader from '../utility/loader';
-import { Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { Link, useNavigate } from 'react-router-dom';
 import SecondaryHeader from '../utility/secondary-header';
 import { rolesList } from '../utility/constants';
-import { Avatar, Table } from 'antd';
+import { Avatar, Table, Modal } from 'antd';
 
 const ManageUserComponent = (props) => {
     const navigate = useNavigate();
 
     const [loaderFlag, setLoaderFlag] = useState(true);
     const [usersList, setUsersList] = useState([]);
+
+    const handleDeleteEmployeeClick = (record) => {
+        Modal.confirm({
+            title: `Are you sure you want to delete "${record?.name}"`,
+            onOk: () => deleteEmployee(record?._id)
+        })
+    }
+
+    const deleteEmployee = (employeeId) => {
+        const config = {
+            method: "delete",
+            url: deleteEmployeeByIdUrl,
+            params: {
+                employeeId,
+            }
+        }
+        axios(config).then((resp) => {
+            setLoaderFlag(true);
+            getUsersList();
+            toast.success("Employee Deleted Successfully")
+        }).catch((e) => {
+            console.error(e);
+            toast.error(e?.response?.data?.message || "Something went wrong");
+        })
+    }
 
     const columns = [
         {
@@ -40,12 +64,15 @@ const ManageUserComponent = (props) => {
             dataIndex: 'clientName',
             key: 'clientName',
             sorter: (a, b) => a?.clientName?.toLowerCase().localeCompare(b?.clientName?.toLowerCase()),
-            render: (text, record) => <Link to={`/manage-clients/${record?.clientId}`}>
-                <Avatar shape="square" size="small" style={{ backgroundColor: '#2245b8', marginRight: '0.8rem' }}>
-                    {record?.clientName?.charAt(0)}
-                </Avatar>
-                {record?.clientName}
-            </Link>
+            render: (text, record) => record?.clientId ?
+                <Link to={`/manage-clients/${record?.clientId}`}>
+                    <Avatar shape="square" size="small" style={{ backgroundColor: '#2245b8', marginRight: '0.8rem' }}>
+                        {record?.clientName?.charAt(0)}
+                    </Avatar>
+                    {record?.clientName}
+                </Link>
+                : <>-</>
+
         },
         {
             title: 'Date of Birth',
@@ -61,20 +88,20 @@ const ManageUserComponent = (props) => {
             render: (text) => new Date(text).toLocaleDateString()
         },
         {
-            title: '',
+            title: 'Actions',
             dataIndex: '_id',
             key: '_id',
             render: (text, record) => {
                 return <div className="d-flex align-items-center">
-                    <span style={{ marginRight: '1rem' }}>
+                    {/* <span style={{ marginRight: '1rem' }}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
-                    </span>
-                    <Link to={`/manage-employees/edit/${record?._id}`} style={{ marginRight: '1rem' }}>
+                    </span> */}
+                    <Link to={`/manage-employees/${record?._id}`} style={{ marginRight: '1rem' }}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2245b8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg>
                     </Link>
-                    <Link to={`/manage-employees/delete/${record?._id}`}>
+                    <div style={{ cursor: "pointer" }} onClick={() => handleDeleteEmployeeClick(record)}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height=" 20" viewBox="0 0 24 24" fill="none" stroke="#ff0000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-                    </Link>
+                    </div>
                 </div>
             }
         },
@@ -87,10 +114,10 @@ const ManageUserComponent = (props) => {
 
     const getUsersList = () => {
         const params = {};
-        if (role === rolesList.ADMIN || role === rolesList.SUPERADMIN) {
+        if (role === rolesList.SUPERADMIN) {
             params.allData = true;
-        } else {
-            params.clientId = localStorage.getItem('clientId');
+        } else if (role === rolesList.ADMIN) {
+            params.agencyId = localStorage.getItem('agencyId');
         }
         setLoaderFlag(true);
         const config = {
@@ -102,7 +129,7 @@ const ManageUserComponent = (props) => {
             params: params
         }
         axios(config).then((resp) => {
-            setUsersList(resp?.data?.data?.employeeList?.map((dat) => ({ clientName: dat?.clientName, ...dat?.employeeData })))
+            setUsersList(resp?.data?.data?.employeeList?.map((dat) => ({ clientName: dat?.clientDetails?.clientName, clientId: dat?.clientDetails?.clientId, ...dat?.employeeData })))
         }).catch((e) => {
             console.error(e);
             toast.error(e?.response?.message);

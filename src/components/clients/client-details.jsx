@@ -1,10 +1,11 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getClientByIdUrl } from '../utility/api-urls';
+import { getClientByIdUrl, updateClientByIdUrl } from '../utility/api-urls';
 import "./client-details.scss";
 import { toast } from 'react-toastify';
 import Loader from '../utility/loader';
+import DetailsFormComponent from '../utility/details-form';
 
 
 const ClientDetailsComponent = (props) => {
@@ -16,6 +17,140 @@ const ClientDetailsComponent = (props) => {
     useEffect(() => {
         getClientDetails(params?.id);
     }, [])
+
+    const formItems = [
+        {
+            type: "heading",
+            key: "heading",
+            label: "Client Name",
+        },
+        {
+            key: "clientName",
+            name: "clientName",
+            label: "Client Name",
+            rules: [{ required: true, message: 'Please enter the Client Name' }],
+            type: "input",
+            editable: true,
+        },
+        {
+            key: "billingAddress",
+            name: "billingAddress",
+            label: "Billing ddress",
+            rules: [{ required: true, message: 'Please enter the Billing ddress' }],
+            type: "input",
+            editable: true,
+        },
+        {
+            key: "street",
+            name: "street",
+            label: "Street",
+            rules: [{ required: true, message: 'Please enter the Street' }],
+            type: "input",
+            editable: true,
+        },
+        {
+            key: "city",
+            name: "city",
+            label: "City",
+            rules: [{ required: true, message: 'Please enter the City' }],
+            type: "input",
+            editable: true,
+        },
+        {
+            key: "state",
+            name: "state",
+            label: "State",
+            rules: [{ required: true, message: 'Please enter the State' }],
+            type: "input",
+            editable: true,
+        },
+        {
+            key: "country",
+            name: "country",
+            label: "Country",
+            rules: [{ required: true, message: 'Please enter the Country' }],
+            type: "input",
+            editable: true,
+        },
+        {
+            key: "postalCode",
+            name: "postalCode",
+            label: "Postal code",
+            rules: [{ required: true, message: 'Please enter the Postal code' }],
+            type: "input",
+            editable: true,
+        },
+        {
+            key: "panNumber",
+            name: "panNumber",
+            label: "PAN Number",
+            rules: [{ required: true, message: 'Please enter the PAN Number' }],
+            type: "input",
+            editable: true,
+        },
+        {
+            key: "gstin",
+            name: "gstin",
+            label: "GSTIN",
+            rules: [{ required: true, message: 'Please enter the GSTIN' }],
+            type: "input",
+            editable: true,
+        },
+        {
+            key: "contactPerson",
+            name: "contactPerson",
+            label: "Contact Person",
+            rules: [{ required: true, message: 'Please enter the Contact Person' }],
+            type: "input",
+            editable: true,
+        },
+        {
+            key: "contactNumber",
+            name: "contactNumber",
+            label: "Contact Number",
+            rules: [{ required: true, message: 'Please enter the Contact Number' }],
+            type: "input",
+            editable: true,
+        },
+        {
+            key: "contactEmail",
+            name: "contactEmail",
+            label: "Contact Email ID",
+            rules: [{ required: true, message: 'Please enter the Contact Email ID' }],
+            type: "input",
+            editable: false,
+        },
+        // {
+        //     key: "gstin",
+        //     name: "gstin",
+        //     label: "GSTIN",
+        //     rules: [{ required: true, message: 'Please enter the GSTIN' }],
+        //     type: "input",
+        //     editable: true,
+        // },
+    ];
+
+    const updateClient = (values) => {
+        setLoaderFlag(true);
+        const payload = {
+            clientId: params?.id,
+            ...values,
+        }
+        delete payload.contactEmail;
+        const config = {
+            method: "put",
+            url: updateClientByIdUrl,
+            data: payload,
+        }
+        axios(config).then((res) => {
+            setClientData(res?.data?.data);
+        }).catch((e) => {
+            console.error(e);
+            toast.error(e?.response?.data?.message || "Something went wrong")
+        }).finally(() => {
+            setLoaderFlag(false);
+        });
+    }
 
     const getClientDetails = (clientId) => {
         const config = {
@@ -38,55 +173,22 @@ const ClientDetailsComponent = (props) => {
     return (
         loaderFlag ? <Loader /> :
             <div className="client-details-container pb-3">
-                {/* <h4 className='w-100 text-start mb-3'>Client Details</h4> */}
-                <div className="item-row row">
-                    <span className='text-start fw-bold col-3'>Client Name</span>
-                    <span className='text-start col-8'>{clientData?.clientName}</span>
-                </div>
-                <div className="item-row row">
-                    <span className='text-start fw-bold col-3'>Billing Address</span>
-                    <span className='text-start col-8'>{clientData?.billingAddress}</span>
-                </div>
-                <div className="item-row row">
-                    <span className='text-start fw-bold col-3'>Street</span>
-                    <span className='text-start col-8'>{clientData?.street}</span>
-                </div>
-                <div className="item-row row">
-                    <span className='text-start fw-bold col-3'>City</span>
-                    <span className='text-start col-8'>{clientData?.city}</span>
-                </div>
-                <div className="item-row row">
-                    <span className='text-start fw-bold col-3'>State</span>
-                    <span className='text-start col-8'>{clientData?.state}</span>
-                </div>
-                <div className="item-row row">
-                    <span className='text-start fw-bold col-3'>Country</span>
-                    <span className='text-start col-8'>{clientData?.country}</span>
-                </div>
-                <div className="item-row row">
-                    <span className='text-start fw-bold col-3'>Postal Code</span>
-                    <span className='text-start col-8'>{clientData?.postalCode}</span>
-                </div>
-                <div className="item-row row">
-                    <span className='text-start fw-bold col-3'>PAN Number</span>
-                    <span className='text-start col-8'>{clientData?.panNumber}</span>
-                </div>
-                <div className="item-row row">
-                    <span className='text-start fw-bold col-3'>GSTIN</span>
-                    <span className='text-start col-8'>{clientData?.gstin}</span>
-                </div>
-                <div className="item-row row">
-                    <span className='text-start fw-bold col-3'>Contact Person</span>
-                    <span className='text-start col-8'>{clientData?.contactPerson}</span>
-                </div>
-                <div className="item-row row">
-                    <span className='text-start fw-bold col-3'>Contact Number</span>
-                    <span className='text-start col-8'>{clientData?.contactNumber}</span>
-                </div>
-                <div className="item-row row">
-                    <span className='text-start fw-bold col-3'>Contact Email</span>
-                    <span className='text-start col-8'>{clientData?.contactEmail}</span>
-                </div>
+                <DetailsFormComponent
+                    formItems={formItems}
+                    onFinish={(e) => { updateClient(e) }}
+                    initialValues={clientData}
+                // hideEdit={true}
+                // isEdit={editMode}
+                // extraButtons={
+                //     [
+                //         <Button key={1} className='fs-1rem px-3 py-2 h-auto' type="secondary" onClick={() => {
+                //             // form.resetFields();
+                //             setEditMode(!editMode)
+                //         }}> {!editMode ? "Edit" : "Cancel"}
+                //         </Button>
+                //     ]
+                // }
+                />
             </div>
 
     )

@@ -35,7 +35,8 @@ axios.interceptors.response.use((response) => {
     return response;
 }, async (error) => {
     const originalRequest = error?.config;
-    if (error?.code === "ERR_NETWORK" || (error?.response?.status === 401 && error?.response?.data?.error === "Unauthorized")) {
+    console.error("axios", error);
+    if (/* error?.code === "ERR_NETWORK" || */ (error?.response?.status === 401 && error?.response?.data?.error === "Unauthorized")) {
         let counter = sessionStorage.getItem('counter');
         if (counter === null || counter === "null") {
             sessionStorage.setItem('counter', 0);

@@ -11,6 +11,9 @@ import DashboardComponent from './dashboard';
 import SignupComponent from './signup';
 import AttendanceComponent from './attendance';
 import ViewEmployeeComponent from '../employees/view-employee';
+import CreateAgencyComponent from '../agency/create-agency';
+import ManageAgencyComponent from '../agency/manage-agency';
+import ViewAgencyComponent from '../agency/view-agency';
 
 const RouterComponent = (props) => {
     return (
@@ -28,6 +31,11 @@ const RouterComponent = (props) => {
                     <Route path="" element={<ManageClientsComponent />} />
                     <Route path=":id" element={<ViewClientComponent />} />
                     <Route path="create-client" element={<CreateClientComponent />} />
+                </Route>
+                <Route path="manage-agency" >
+                    <Route path="" element={<ManageAgencyComponent />} />
+                    <Route path=":id" element={<ViewAgencyComponent />} />
+                    <Route path="create-agency" element={<CreateAgencyComponent />} />
                 </Route>
 
                 <Route path="attendance" element={<AttendanceComponent />} />
