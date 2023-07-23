@@ -144,6 +144,7 @@ const ClientDetailsComponent = (props) => {
         }
         axios(config).then((res) => {
             setClientData(res?.data?.data);
+            toast.success("Client Updated Successfully")
         }).catch((e) => {
             console.error(e);
             toast.error(e?.response?.data?.message || "Something went wrong")

@@ -68,6 +68,7 @@ const ViewAgencyComponent = (props) => {
         };
         axios(config).then((resp) => {
             setOrgDetails(resp?.data?.data);
+
         }).catch((e) => {
             console.error(e);
             toast.error(e?.response?.data?.message || "Something went wrong");
@@ -86,6 +87,7 @@ const ViewAgencyComponent = (props) => {
         };
         axios(config).then((resp) => {
             setOrgDetails(resp?.data?.data);
+            toast.success("Agency Updated Successfully")
         }).catch((e) => {
             console.error(e);
             toast.error(e?.response?.data?.message || "Something went wrong");

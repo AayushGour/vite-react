@@ -94,7 +94,7 @@ const EmployeeInsuranceForm = (props) => {
             label: "Insurance No",
             rules: [{ required: true, message: 'Please enter the Insurance No' }],
             type: "input",
-            editable: false,
+            editable: true,
         },
         {
             key: "name",
@@ -260,6 +260,7 @@ const EmployeeInsuranceForm = (props) => {
                             formItems={formItems}
                             initialValues={initialValues}
                             onFinish={onFinish}
+                            hideEdit={true}
                             extraButtons={[
                                 <Button key={1} className='fs-1rem ms-3 px-3 py-2 h-auto' type="secondary" onClick={() => setVisible(true)}>View ID Card</Button>
                             ]}
