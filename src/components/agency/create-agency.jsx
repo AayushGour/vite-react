@@ -5,21 +5,24 @@ import "./create-agency.scss";
 import { createAgencyUrl } from '../utility/api-urls';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const CreateAgencyComponent = (props) => {
-    const [loaderFlag, setLoaderFlag] = useState(false)
+    const navigate = useNavigate();
+
+    const [loaderFlag, setLoaderFlag] = useState(false);
 
     const { Item } = Form;
     const onFinish = (values) => {
         setLoaderFlag(true);
-        console.log('Form values:', values);
         const config = {
             method: "post",
             url: createAgencyUrl,
             data: values,
         }
         axios(config).then((resp) => {
-            toast.success(resp?.data?.data?.message)
+            toast.success(resp?.data?.data?.message);
+            navigate("/manage-agency");
         }).catch((e) => {
             console.error(e);
             toast.error(e?.response?.data?.message || "Something went wrong");

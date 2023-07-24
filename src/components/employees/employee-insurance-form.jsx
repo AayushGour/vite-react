@@ -17,8 +17,14 @@ const EmployeeInsuranceForm = (props) => {
 
     const onFinish = (values) => {
         setLoaderFlag(true);
-        const data = Object.assign({}, values, { employeeId: params?.id });
-        console.log('Form values:', data);
+        const data = {
+            employeeId: params?.id,
+            insuranceNo: values?.insuranceNo,
+            branchOffice: values?.branchOffice,
+            dispensary: values?.dispensary,
+            employerCode: values?.employerCode,
+            employersNameAddress: values?.employersNameAddress,
+        };
         const config = {
             method: "post",
             url: updateEmployeeInsuranceUrl,
@@ -28,6 +34,7 @@ const EmployeeInsuranceForm = (props) => {
             console.log(resp?.data);
             // setInitialValues(values);
             getEmployeeInsuranceDetails(params?.id);
+            toast.success(resp?.data?.data);
         }).catch((e) => {
             console.error(e);
             toast.error(e?.response?.data?.message || "Something went wrong");
@@ -50,28 +57,29 @@ const EmployeeInsuranceForm = (props) => {
             }
         }
         axios(config)?.then((resp) => {
-            const { employeeDetails, insuranceDetails } = resp?.data?.data;
+            const { insuranceDetails } = resp?.data?.data;
+            const respData = resp?.data?.data
             const proData = {
-                name: employeeDetails?.name,
-                guardian: employeeDetails?.guardian,
+                name: respData?.name,
+                guardian: respData?.guardian,
                 insuranceNo: insuranceDetails?.insuranceNo,
-                dob: new Date(employeeDetails?.dob)?.toISOString().split("T")[0],
-                sex: employeeDetails.sex,
-                maritalStatus: employeeDetails.maritalStatus,
-                permanentAddress: employeeDetails?.permanentAddress,
-                presentAddress: employeeDetails?.presentAddress,
+                dob: new Date(respData?.dob)?.toISOString().split("T")[0],
+                sex: respData.sex,
+                maritalStatus: respData.maritalStatus,
+                permanentAddress: respData?.permanentAddress,
+                presentAddress: respData?.presentAddress,
                 branchOffice: insuranceDetails?.branchOffice,
                 dispensary: insuranceDetails?.dispensary,
                 employerCode: insuranceDetails?.employerCode,
-                appointmentDate: insuranceDetails?.appointmentDate,
+                appointmentDate: respData?.appointmentDate,
                 employersNameAddress: insuranceDetails?.employersNameAddress,
-                nomineeName: employeeDetails?.nomineeName,
-                nomineeRelationship: employeeDetails?.nomineeRelation,
-                nomineeAddress: employeeDetails?.nomineeAddress,
-                nomineeDob: employeeDetails?.nomineeDob,
-                createdDate: employeeDetails?.createdDate,
-                editedDate: employeeDetails?.editedDate,
-                familyDetails: employeeDetails?.familyDetails,
+                nomineeName: respData?.nomineeName,
+                nomineeRelationship: respData?.nomineeRelation,
+                nomineeAddress: respData?.nomineeAddress,
+                nomineeDob: respData?.nomineeDob,
+                createdDate: respData?.createdDate,
+                editedDate: respData?.editedDate,
+                familyDetails: respData?.familyDetails,
             }
             setInitialValues(proData);
         }).catch((e) => {
@@ -189,7 +197,7 @@ const EmployeeInsuranceForm = (props) => {
             label: "Date of Appointment",
             rules: [{ required: true, message: 'Please enter the Date of Appointment' }],
             type: "datePicker",
-            editable: true,
+            editable: false,
         },
         {
             key: "employersNameAddress",
@@ -260,7 +268,7 @@ const EmployeeInsuranceForm = (props) => {
                             formItems={formItems}
                             initialValues={initialValues}
                             onFinish={onFinish}
-                            hideEdit={true}
+                            hideEdit={false}
                             extraButtons={[
                                 <Button key={1} className='fs-1rem ms-3 px-3 py-2 h-auto' type="secondary" onClick={() => setVisible(true)}>View ID Card</Button>
                             ]}

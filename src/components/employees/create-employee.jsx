@@ -36,7 +36,9 @@ const CreateUserComponent = (props) => {
     const [nomineeName, setNomineeName] = useState('');
     const [nomineeRelation, setNomineeRelation] = useState('');
     const [nomineeDob, setNomineeDob] = useState('');
+    const [nomineeAddress, setNomineeAddress] = useState('');
     const [oldEsiNumber, setOldEsiNumber] = useState('');
+    const [appointmentDate, setAppointmentDate] = useState('');
     const [references, setReferences] = useState([
         { index: 1, name: "", occupation: "", address: "" },
         { index: 2, name: "", occupation: "", address: "" },
@@ -129,9 +131,11 @@ const CreateUserComponent = (props) => {
         formData.append("panNumber", panNumber)
         formData.append("idMarks", idMarks)
         formData.append("maritalStatus", maritalStatus)
+        formData.append("appointmentDate", appointmentDate)
         formData.append("nomineeName", nomineeName)
         formData.append("nomineeRelation", nomineeRelation)
         formData.append("nomineeDob", nomineeDob)
+        formData.append("nomineeAddress", nomineeAddress)
         formData.append("agencyId", localStorage.getItem('agencyId'))
         // formData.append("clientId", clientId)
         if (familyDetails?.length === 1) {
@@ -389,6 +393,27 @@ const CreateUserComponent = (props) => {
                                 <option value="Annulled">Annulled</option>
                             </Form.Control>
                         </Form.Group>
+                        <Form.Group className='text-start w-49' controlId="nomineeName">
+                            <Form.Label>Old ESI Number (Optional)</Form.Label>
+                            <Form.Control
+                                type="text"
+                                value={oldEsiNumber}
+                                onChange={(e) => setOldEsiNumber(e.target.value)}
+                            />
+                        </Form.Group>
+                        <Form.Group className='text-start w-49' controlId="nomineeName">
+                            <Form.Label>Date of Appointment <span className='color-red'>*</span></Form.Label>
+                            <Form.Control
+                                type="date"
+                                value={appointmentDate}
+                                onChange={(e) => setAppointmentDate(e.target.value)}
+                                required
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                Please provide date of birth of nominee.
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                        <h4 className='text-start w-100'>Nominee Details</h4>
                         <Form.Group className='text-start w-32' controlId="nomineeName">
                             <Form.Label>Nominee <span className='color-red'>*</span></Form.Label>
                             <Form.Control
@@ -426,14 +451,19 @@ const CreateUserComponent = (props) => {
                                 Please provide date of birth of nominee.
                             </Form.Control.Feedback>
                         </Form.Group>
-                        <Form.Group className='text-start w-32' controlId="nomineeName">
-                            <Form.Label>Old ESI Number (Optional)</Form.Label>
+                        <Form.Group className='text-start w-49' controlId="nomineeAddress">
+                            <Form.Label>Nominee Address <span className='color-red'>*</span></Form.Label>
                             <Form.Control
-                                type="text"
-                                value={oldEsiNumber}
-                                onChange={(e) => setOldEsiNumber(e.target.value)}
+                                as="textarea"
+                                value={nomineeAddress}
+                                onChange={(e) => setNomineeAddress(e.target.value)}
+                                required
                             />
+                            <Form.Control.Feedback type="invalid">
+                                Please provide a nominee address.
+                            </Form.Control.Feedback>
                         </Form.Group>
+
                         <div className="w-100 mt-3 text-end">
                             <Button type='primary'
                                 disabled={
@@ -453,7 +483,9 @@ const CreateUserComponent = (props) => {
                                     maritalStatus === "" ||
                                     nomineeName === "" ||
                                     nomineeRelation === "" ||
-                                    nomineeDob === ""
+                                    nomineeDob === "" ||
+                                    nomineeAddress === "" ||
+                                    appointmentDate === ""
                                 }
                                 onClick={() => setCurrentStep(2)}>Next</Button>
                         </div>
