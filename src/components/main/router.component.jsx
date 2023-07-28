@@ -27,7 +27,7 @@ const RouterComponent = (props) => {
                     <Route path="" element={<ManageUserComponent />} />
                     <Route path=":id" element={<ViewEmployeeComponent />} />
                     <Route path="create-user" element={<CreateUserComponent />} />
-                    <Route path="appointment-letter" element={<AppointmentLetterComponent />} />
+                    {/* <Route path="appointment-letter/:id" element={<AppointmentLetterComponent />} /> */}
 
                 </Route>
                 <Route path="manage-clients" >

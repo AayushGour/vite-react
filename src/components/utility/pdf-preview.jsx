@@ -33,7 +33,8 @@ function PdfPreview({ docDefinition, className }) {
             const docDef = {
                 ...docDefinition,
                 defaultStyle: {
-                    font: 'Helvetica'
+                    font: 'Helvetica',
+                    lineHeight: 1.2,
                 }
             }
             pdfMake.fonts = {

@@ -13,7 +13,7 @@ const initialState = {
 const appReducer = (state = initialState, action) => {
     switch (action.type) {
         case SET_EMPLOYEE_DETAILS_DATA:
-            return ({ ...state, ...action?.payload });
+            return ({ ...state, employeeDetails: action?.payload });
         // case TEST_ACTION:
 
         //     break;

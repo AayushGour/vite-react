@@ -435,17 +435,16 @@ const EmployeeDetailsComponent = (props) => {
                     formItems={formItems}
                     onFinish={(e) => { updateEmployeeDetails(e) }}
                     initialValues={employeeData}
-                    hideEdit={true}
+                    hideEdit={false}
                     isEdit={editMode}
-                    extraButtons={
-                        [
-                            <Button key={1} className='fs-1rem px-3 py-2 h-auto' type="secondary" onClick={() => {
-                                // form.resetFields();
-                                setEditMode(!editMode)
-                            }}> {!editMode ? "Edit" : "Cancel"}
-                            </Button>
-                        ]
-                    }
+                // extraButtons={
+                //     [
+                //         <Button key={1} className='fs-1rem px-3 py-2 h-auto' type="secondary" onClick={() => {
+                //             navigate(`/manage-employees/appointment-letter/${params?.id}`)
+                //         }}>Appointment Letter
+                //         </Button>
+                //     ]
+                // }
                 />
             </div>
     )

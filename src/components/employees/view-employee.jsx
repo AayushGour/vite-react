@@ -1,8 +1,10 @@
 import { Tabs } from 'antd';
 import React from 'react';
 import SecondaryHeader from '../utility/secondary-header';
+import AppointmentLetterComponent from './appointment-letter';
 import EmployeeDetailsComponent from './employee-details';
 import EmployeeInsuranceForm from './employee-insurance-form';
+import ProvidentFundFormComponent from './provident-fund-form';
 import "./view-employee.scss";
 
 const ViewEmployeeComponent = (props) => {
@@ -16,6 +18,16 @@ const ViewEmployeeComponent = (props) => {
             key: '2',
             label: `Insurance Form`,
             children: <EmployeeInsuranceForm />,
+        },
+        {
+            key: '3',
+            label: `Appointment Letter`,
+            children: <AppointmentLetterComponent />,
+        },
+        {
+            key: '4',
+            label: `EPF Form`,
+            children: <ProvidentFundFormComponent />,
         },
     ];
 

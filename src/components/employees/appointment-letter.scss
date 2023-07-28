@@ -1,0 +1,18 @@
+.appointment-letter-container {
+    .ant-form {
+        .ant-form-item {
+            .ant-form-item-label {
+                width: 25%;
+                text-align: start;
+                label {
+                    font-size: 1rem;
+                }
+            }
+            .ant-form-item-control-input {
+                input {
+                    font-size: 1rem;
+                }
+            }
+        }
+    }
+}
