@@ -35,8 +35,8 @@ const ClientDetailsComponent = (props) => {
         {
             key: "billingAddress",
             name: "billingAddress",
-            label: "Billing ddress",
-            rules: [{ required: true, message: 'Please enter the Billing ddress' }],
+            label: "Billing Address",
+            rules: [{ required: true, message: 'Please enter the Billing Address' }],
             type: "input",
             editable: true,
         },
