@@ -3,6 +3,7 @@ import React from 'react';
 import SecondaryHeader from '../utility/secondary-header';
 import AppointmentLetterComponent from './appointment-letter';
 import EmployeeDetailsComponent from './employee-details';
+import EmployeeEngagementComponent from './employee-engagement';
 import EmployeeInsuranceForm from './employee-insurance-form';
 import ProvidentFundFormComponent from './provident-fund-form';
 import "./view-employee.scss";
@@ -16,16 +17,21 @@ const ViewEmployeeComponent = (props) => {
         },
         {
             key: '2',
+            label: `Assign Employee`,
+            children: <EmployeeEngagementComponent />,
+        },
+        {
+            key: '3',
             label: `Insurance Form`,
             children: <EmployeeInsuranceForm />,
         },
         {
-            key: '3',
+            key: '4',
             label: `Appointment Letter`,
             children: <AppointmentLetterComponent />,
         },
         {
-            key: '4',
+            key: '5',
             label: `EPF Form`,
             children: <ProvidentFundFormComponent />,
         },

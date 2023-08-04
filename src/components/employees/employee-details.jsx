@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { getEmployeeByIdUrl, updateEmployeeDetailsUrl } from '../utility/api-urls';
 import Loader from '../utility/loader';
 import DetailsFormComponent from '../utility/details-form';
+import ReferenceEditableTable from '../utility/reference-editable-table';
 
 const EmployeeDetailsComponent = (props) => {
     const params = useParams();
@@ -30,7 +31,7 @@ const EmployeeDetailsComponent = (props) => {
         setCurrentEditing({});
     };
 
-    const handleFieldChange = (value, key, dataIndex) => {
+    const handleReferenceFieldChange = (value, key, dataIndex) => {
         const datum = employeeData?.references.find((item) => item._id === key);
         if (dataIndex === 'residingWith' && value) {
             setCurrentEditing({ ...datum, ...currentEditing, [dataIndex]: value, placeOfResidence: '' });
@@ -39,6 +40,11 @@ const EmployeeDetailsComponent = (props) => {
                 ...datum, ...currentEditing, [dataIndex]: value
             })
         }
+    };
+
+    const handleNomineeFieldChange = (value, key, dataIndex) => {
+        const datum = employeeData?.nomineeDetails.find((item) => item._id === key);
+        setCurrentEditing({ ...datum, ...currentEditing });
     };
 
 
@@ -69,19 +75,17 @@ const EmployeeDetailsComponent = (props) => {
             title: 'Name',
             dataIndex: 'name',
             key: 'name',
+            editRender: (text, record) => <><Input value={currentEditing?.name}
+                onChange={(e) => handleReferenceFieldChange(e.target.value, record._id, 'name')}
+            /></>,
             sorter: (a, b) => a?.name?.toLowerCase().localeCompare(b?.name?.toLowerCase()),
             render: (text, record) => <>
-                {isEditing(record) ? <Input value={currentEditing?.name}
-                    onChange={(e) => handleFieldChange(e.target.value, record._id, 'name')}
-                />
-                    :
-                    <>
-                        <Avatar shape="square" size="small" style={{ backgroundColor: '#2245b8', marginRight: '0.8rem' }}>
-                            {record?.name?.charAt(0).toUpperCase()}
-                        </Avatar>
-                        {record?.name}
-                    </>
-                }
+                <>
+                    <Avatar shape="square" size="small" style={{ backgroundColor: '#2245b8', marginRight: '0.8rem' }}>
+                        {record?.name?.charAt(0).toUpperCase()}
+                    </Avatar>
+                    {record?.name}
+                </>
             </>,
             editable: true,
         },
@@ -90,9 +94,9 @@ const EmployeeDetailsComponent = (props) => {
             dataIndex: 'occupation',
             key: 'occupation',
             render: (text, record) => {
-                if (isEditing(record)) {
+                if (editMode) {
                     return <Input value={currentEditing?.occupation}
-                        onChange={(e) => handleFieldChange(e.target.value, record._id, 'occupation')}
+                        onChange={(e) => handleReferenceFieldChange(e.target.value, record._id, 'occupation')}
                     />;
                 }
                 return <span>{text}</span>;
@@ -104,12 +108,133 @@ const EmployeeDetailsComponent = (props) => {
             dataIndex: 'address',
             key: 'address',
             render: (text, record) => {
-                if (isEditing(record)) {
+                if (editMode) {
                     return <Input value={currentEditing?.address}
-                        onChange={(e) => handleFieldChange(e.target.value, record._id, 'address')}
+                        onChange={(e) => handleReferenceFieldChange(e.target.value, record._id, 'address')}
                     />;
                 }
                 return <span>{text}</span>;
+            },
+            editable: true,
+        },
+        // editMode ?
+        //     {
+        //         title: 'Actions',
+        //         dataIndex: 'actions',
+        //         render: (_, record) => {
+        //             const editable = editMode;
+        //             return (
+        //                 <Space>
+        //                     {editable ? (
+        //                         <>
+        //                             <Button type="primary" onClick={() => save(currentEditing, record._id)}>
+        //                                 Save
+        //                             </Button>
+        //                             <Button onClick={() => cancel(record?._id)}>Cancel</Button>
+        //                         </>
+        //                     ) : (
+        //                         <Button disabled={editingKey !== ''} onClick={() => edit(record)}>
+        //                             Edit
+        //                         </Button>
+        //                     )}
+        //                 </Space>
+        //             );
+        //         },
+        //     } : {},
+
+    ];
+
+    const nomineeColumns = [
+        {
+            title: 'Name',
+            dataIndex: 'nomineeName',
+            key: 'nomineeName',
+            editRender: (text, record) => <>
+                <Input value={currentEditing?.nomineeDetails?.nomineeName}
+                    onChange={(e) => handleNomineeFieldChange(e.target.value, record._id, 'nomineeName')}
+                />
+            </>,
+            sorter: (a, b) => a?.nomineeName?.toLowerCase().localeCompare(b?.nomineeName?.toLowerCase()),
+            render: (text, record) => <>
+
+                <Avatar shape="square" size="small" style={{ backgroundColor: '#2245b8', marginRight: '0.8rem' }}>
+                    {record?.nomineeName?.charAt(0).toUpperCase()}
+                </Avatar>
+                {record?.nomineeName || "-"}
+            </>,
+            editable: true,
+        },
+        {
+            title: 'Relationship with Nominee',
+            dataIndex: 'nomineeRelation',
+            key: 'nomineeRelation',
+            editRender: (text, record) => {
+                return <Input value={currentEditing?.nomineeDetails?.nomineeRelation}
+                    onChange={(e) => handleNomineeFieldChange(e.target.value, record._id, 'nomineeRelation')}
+                />;
+            },
+            render: (text, record) => {
+                // if (editMode) {
+                //     return <Input value={currentEditing?.nomineeDetails?.nomineeRelation}
+                //         onChange={(e) => handleNomineeFieldChange(e.target.value, record._id, 'nomineeRelation')}
+                //     />;
+                // }
+                return <span>{text || "-"}</span>;
+            },
+            editable: true,
+        },
+        {
+            title: 'Date of Birth',
+            dataIndex: 'nomineeDob',
+            key: 'nomineeDob',
+            editRender: (text, record) => {
+                return <Input value={currentEditing?.nomineeDetails?.nomineeDob}
+                    onChange={(e) => handleNomineeFieldChange(e.target.value, record._id, 'nomineeDob')}
+                />;
+            },
+            render: (text, record) => {
+                // if (editMode) {
+                //     return <Input value={currentEditing?.nomineeDetails?.nomineeDob}
+                //         onChange={(e) => handleNomineeFieldChange(e.target.value, record._id, 'nomineeDob')}
+                //     />;
+                // }
+                return <span>{text?.split("T")?.[0] || "-"}</span>;
+            },
+            editable: true,
+        },
+        {
+            title: 'Address',
+            dataIndex: 'nomineeAddress',
+            key: 'nomineeAddress',
+            editRender: (text, record) => {
+                return <Input value={currentEditing?.nomineeDetails?.nomineeAddress}
+                    onChange={(e) => handleNomineeFieldChange(e.target.value, record._id, 'nomineeAddress')}
+                />;
+            },
+            render: (text, record) => {
+                // if (editMode) {
+                //     return <Input value={currentEditing?.nomineeDetails?.nomineeAddress}
+                //         onChange={(e) => handleNomineeFieldChange(e.target.value, record._id, 'nomineeAddress')}
+                //     />;
+                // }
+                return <span>{text || "-"}</span>;
+            },
+            editable: true,
+        },
+        {
+            title: 'Percentage',
+            dataIndex: 'percentage',
+            key: 'percentage',
+            editRender: (text, record) => <Input value={currentEditing?.nomineeDetails?.percentage}
+                onChange={(e) => handleNomineeFieldChange(e.target.value, record._id, 'percentage')}
+            />,
+            render: (text, record) => {
+                // if (editMode) {
+                //     return <Input value={currentEditing?.nomineeDetails?.percentage}
+                //         onChange={(e) => handleNomineeFieldChange(e.target.value, record._id, 'percentage')}
+                //     />;
+                // }
+                return <span>{text || "-"}</span>;
             },
             editable: true,
         },
@@ -118,7 +243,7 @@ const EmployeeDetailsComponent = (props) => {
                 title: 'Actions',
                 dataIndex: 'actions',
                 render: (_, record) => {
-                    const editable = isEditing(record);
+                    const editable = editMode;
                     return (
                         <Space>
                             {editable ? (
@@ -285,41 +410,49 @@ const EmployeeDetailsComponent = (props) => {
             type: "input",
             editable: true,
         },
+        // {
+        //     key: "nomineeName",
+        //     name: "nomineeName",
+        //     label: "Name",
+        //     rules: [{ required: true, message: 'Please enter Name of nominee' }],
+        //     type: "input",
+        //     editable: true,
+        // },
+        // {
+        //     key: "nomineeRelation",
+        //     name: "nomineeRelation",
+        //     label: "Relationship with Nominee",
+        //     rules: [{ required: true, message: 'Please enter relationship with Nominee' }],
+        //     type: "input",
+        //     editable: true,
+        // },
+        // {
+        //     key: "nomineeDob",
+        //     name: "nomineeDob",
+        //     label: "Date of Birth of Nominee",
+        //     rules: [{ required: true, message: 'Please enter the Date of Birth of Nominee' }],
+        //     type: "datePicker",
+        //     editable: true,
+        // },
+        // {
+        //     key: "nomineeAddress",
+        //     name: "nomineeAddress",
+        //     label: "Address",
+        //     rules: [{ required: true, message: 'Please enter Nominee\'s Address' }],
+        //     type: "textarea",
+        //     editable: true,
+        // },
         {
             type: "heading",
             key: "heading",
             label: "Nominee Details",
         },
         {
-            key: "nomineeName",
-            name: "nomineeName",
-            label: "Name",
-            rules: [{ required: true, message: 'Please enter Name of nominee' }],
-            type: "input",
-            editable: true,
-        },
-        {
-            key: "nomineeRelation",
-            name: "nomineeRelation",
-            label: "Relationship with Nominee",
-            rules: [{ required: true, message: 'Please enter relationship with Nominee' }],
-            type: "input",
-            editable: true,
-        },
-        {
-            key: "nomineeDob",
-            name: "nomineeDob",
-            label: "Date of Birth of Nominee",
-            rules: [{ required: true, message: 'Please enter the Date of Birth of Nominee' }],
-            type: "datePicker",
-            editable: true,
-        },
-        {
-            key: "nomineeAddress",
-            name: "nomineeAddress",
-            label: "Address",
-            rules: [{ required: true, message: 'Please enter Nominee\'s Address' }],
-            type: "textarea",
+            key: "nomineeDetails",
+            name: "nomineeDetails",
+            // label: "Nominee Details",
+            type: "nom-table",
+            className: "w-100 editable-table-wrapper",
             editable: true,
         },
         {
@@ -330,15 +463,18 @@ const EmployeeDetailsComponent = (props) => {
         {
             key: "references",
             name: "references",
-            label: "References",
-            type: "custom",
-            component: <Table
-                bordered
-                className='w-100 mb-4'
-                dataSource={employeeData?.references}
-                columns={referenceColumns}
-                pagination={false}
-            />,
+            // label: "References",
+            type: "ref-table",
+            className: "w-100 editable-table-wrapper",
+            // component: <ReferenceEditableTable
+            //     initialData={employeeData?.references}
+            //     dataColumns={referenceColumns}
+            //     pagination={false}
+            //     isEdit={editMode}
+            //     onChange={(e) => setCurrentEditing((prev) => ({ ...prev, references: e }))}
+
+            // // onChange={(e) => setCurrentEditing((prev) => ({ ...prev, nomineeDetails: e }))}
+            // />,
             editable: true,
         },
         {
@@ -365,8 +501,16 @@ const EmployeeDetailsComponent = (props) => {
             }
         }
         axios(config).then((resp) => {
-            setEmployeeData(resp?.data?.data);
-            setInitialData(resp?.data?.data);
+            const empDat = {
+                ...resp?.data?.data,
+                nomineeName: resp?.data?.data?.nomineeDetails?.[0]?.nomineeName,
+                nomineeRelation: resp?.data?.data?.nomineeDetails?.[0]?.nomineeRelation,
+                nomineeDob: resp?.data?.data?.nomineeDetails?.[0]?.nomineeDob,
+                nomineeAddress: resp?.data?.data?.nomineeDetails?.[0]?.nomineeAddress,
+                percentage: resp?.data?.data?.nomineeDetails?.[0]?.percentage,
+            }
+            setEmployeeData(empDat);
+            setInitialData(empDat);
         }).catch((e) => {
             console.error(e);
             toast.error(e?.response?.data?.message);
@@ -391,15 +535,16 @@ const EmployeeDetailsComponent = (props) => {
             "aadharNumber",
             "idMarks",
             "maritalStatus",
-            "nomineeName",
-            "nomineeRelation",
-            "nomineeDob",
-            "nomineeAddress",
+            // "nomineeName",
+            // "nomineeRelation",
+            // "nomineeDob",
+            // "nomineeAddress",
             "oldEsiNumber",
             "familyDetails",
             "panNumber",
             "sex",
             "references",
+            "nomineeDetails",
             "_id",
         ]
         const payload = Object.keys(mergedEmployeeData)

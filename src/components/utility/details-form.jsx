@@ -2,6 +2,8 @@ import { Button, Form, Input, Select } from 'antd';
 import React, { useEffect, useState } from 'react';
 import EditableTable from './family-editable-table';
 import "./details-form.scss";
+import ReferenceEditableTable from './reference-editable-table';
+import NomineeEditableTable from './nominee-editable-table';
 
 const DetailsFormComponent = (props) => {
     const { onFinish, initialValues, formItems, isEdit, extraButtons, hideEdit } = props;
@@ -62,6 +64,14 @@ const DetailsFormComponent = (props) => {
                         inputComponent = <EditableTable key={formItem?.key} isEdit={editMode && formItem?.editable} initialData={initialValues?.[formItem?.name]} />
                         break;
                     }
+                    case "ref-table": {
+                        inputComponent = <ReferenceEditableTable key={formItem?.key} isEdit={editMode && formItem?.editable} initialData={initialValues?.[formItem?.name]} />
+                        break;
+                    }
+                    case "nom-table": {
+                        inputComponent = <NomineeEditableTable key={formItem?.key} isEdit={editMode && formItem?.editable} initialData={initialValues?.[formItem?.name]} />
+                        break;
+                    }
                     case 'custom': {
                         inputComponent = formItem?.component;
                         break;
@@ -79,7 +89,7 @@ const DetailsFormComponent = (props) => {
                 >
                     {!editMode || !formItem?.editable ?
                         <span className='d-block w-100 fs-1rem text-start'>
-                            {formItem?.type === "datePicker" ? (!!initialValues?.[formItem?.name] && new Date(initialValues?.[formItem?.name]) !== "Invalid Date" ? new Date(initialValues?.[formItem?.name]).toLocaleDateString() : "-") : formItem?.type === "table" ? inputComponent : initialValues?.[formItem?.name] || "-"}</span>
+                            {formItem?.type === "datePicker" ? (!!initialValues?.[formItem?.name] && new Date(initialValues?.[formItem?.name]) !== "Invalid Date" ? new Date(initialValues?.[formItem?.name]).toLocaleDateString() : "-") : formItem?.type === "table" || formItem?.type === "ref-table" || formItem?.type === "nom-table" ? inputComponent : initialValues?.[formItem?.name] || "-"}</span>
                         :
                         inputComponent}
                 </Form.Item>

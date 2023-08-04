@@ -1,3 +1,28 @@
+03-Aug-2023 15:31:25
+multi employee assignment
+
+01-Aug-2023 18:11:52
+Start & end time for shift details
+
+account number, ifsc code, bank name for client and employee
+
+invoice
+- due till
+- sales person
+- Description
+- discount
+- save as draft
+- send
+- update to payment received
+- make as overdue
+- 0000 - 2359
+- weekly view
+- check crm, greyhr, zoho
+- Bulk insert attendance
+
+after 9pm night shift
+salary entry form
+
 23-Jul-2023 11:11:47
 insurance form update
 add date of appointment in create employee

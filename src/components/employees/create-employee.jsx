@@ -46,6 +46,9 @@ const CreateUserComponent = (props) => {
     const [familyDetails, setFamilyDetails] = useState([]);
     const [filesList, setFilesList] = useState([]);
     const [clientsList, setClientsList] = useState([]);
+    const [accountNumber, setAccountNumber] = useState("");
+    const [ifscCode, setIfscCode] = useState("");
+    const [uanNumber, setUanNumber] = useState("");
     const [clientId, setClientId] = useState(localStorage.getItem('clientId') || "");
 
     const role = localStorage.getItem('roles');
@@ -136,7 +139,19 @@ const CreateUserComponent = (props) => {
         formData.append("nomineeRelation", nomineeRelation)
         formData.append("nomineeDob", nomineeDob)
         formData.append("nomineeAddress", nomineeAddress)
+        formData.append("accountNumber", accountNumber)
+        formData.append("ifscCode", ifscCode)
+        formData.append("uanNumber", uanNumber)
         formData.append("agencyId", localStorage.getItem('agencyId'))
+        formData.append("nomineeDetails", JSON.stringify({
+            nomineeName,
+            nomineeRelation,
+            nomineeDob,
+            nomineeAddress,
+            percentage: 100
+        }));
+        formData.append("nomineeDetails", JSON.stringify({}));
+
         // formData.append("clientId", clientId)
         if (familyDetails?.length === 1) {
             formData?.append('familyDetails', JSON.stringify({}));
@@ -463,6 +478,43 @@ const CreateUserComponent = (props) => {
                                 Please provide a nominee address.
                             </Form.Control.Feedback>
                         </Form.Group>
+                        <h4 className='text-start w-100'>Bank Details</h4>
+                        <Form.Group className='text-start w-32' controlId="accountNumber">
+                            <Form.Label>Account Number <span className='color-red'>*</span></Form.Label>
+                            <Form.Control
+                                type="text"
+                                value={accountNumber}
+                                onChange={(e) => setAccountNumber(e.target.value)}
+                                required
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                Please provide a Account Number.
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                        <Form.Group className='text-start w-32' controlId="ifscCode">
+                            <Form.Label>IFSC Code <span className='color-red'>*</span></Form.Label>
+                            <Form.Control
+                                type="text"
+                                value={ifscCode}
+                                onChange={(e) => setIfscCode(e.target.value)}
+                                required
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                Please provide a IFSC Code.
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                        <Form.Group className='text-start w-32' controlId="accountNumber">
+                            <Form.Label>UAN Number <span className='color-red'>*</span></Form.Label>
+                            <Form.Control
+                                type="text"
+                                value={uanNumber}
+                                onChange={(e) => setUanNumber(e.target.value)}
+                                required
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                Please provide a UAN Number.
+                            </Form.Control.Feedback>
+                        </Form.Group>
 
                         <div className="w-100 mt-3 text-end">
                             <Button type='primary'
@@ -485,7 +537,10 @@ const CreateUserComponent = (props) => {
                                     nomineeRelation === "" ||
                                     nomineeDob === "" ||
                                     nomineeAddress === "" ||
-                                    appointmentDate === ""
+                                    appointmentDate === "" ||
+                                    accountNumber === "" ||
+                                    ifscCode === "" ||
+                                    uanNumber === ""
                                 }
                                 onClick={() => setCurrentStep(2)}>Next</Button>
                         </div>

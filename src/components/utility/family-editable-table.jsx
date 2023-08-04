@@ -107,7 +107,6 @@ const EditableTable = ({ initialData = [], onChange, isEdit }) => {
             width: "15%",
             render: (text, record) => {
                 if (isEditing(record)) {
-                    console.log(currentEditing?.dob, record)
                     return (
                         <Input className='fs-1rem' type='date' value={currentEditing?.dob?.includes("T") ? currentEditing?.dob?.split("T")?.[0] : currentEditing?.dob}
                             onChange={(e) => handleFieldChange(e.target.value, record.key, 'dob')}
