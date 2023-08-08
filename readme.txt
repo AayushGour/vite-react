@@ -1,3 +1,21 @@
+06-Aug-2023 13:55:02
+supervisor (agency) -> makes note of entry time (can be manual and/or biometric)
+client supervisor(from client) -> 8 or 12 hour shift
+attendance is sent at end of month
+both the supervisors entries will be cross verified and uploaded
+based on the above data, the salary is calulated
+
+error while creating employee ✅
+error while assigning employee ✅
+
+number of sec guards, price per guard, days of scurity will be captured at client entry
+
+the employee can work extra
+
+for deduction -> from agency side
+deductions while employee is onboarded
+
+
 03-Aug-2023 15:31:25
 multi employee assignment
 https://www.zohowebstatic.com/sites/zweb/images/people/mark-attendance-from.png

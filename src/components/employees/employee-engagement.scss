@@ -33,9 +33,11 @@
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
-        gap: 2%;
+        column-gap: 2%;
+        row-gap: 10px;
         padding: 0px 0px 0px 15px;
         border-left: 1px solid lightgrey;
+        align-content: start;
         .history-card {
             width: 49%;
             max-height: 20%;

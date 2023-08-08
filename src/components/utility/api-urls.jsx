@@ -30,3 +30,5 @@ export const updateAgencyByIdUrl = BASE_URL + "api/v1/update-agency";
 
 export const addEmployeeEngagementUrl = BASE_URL + "api/v1/add-employee-engagement";
 export const getEmployeeEngagementListUrl = BASE_URL + "api/v1/get-employee-engagement-history";
+
+export const getAttendanceDataUrl = BASE_URL + "api/v1/get-attendance-data";

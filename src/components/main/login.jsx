@@ -38,6 +38,9 @@ const LoginComponent = (props) => {
                 if (data?.agencyId) {
                     localStorage.setItem('agencyId', data?.agencyId);
                 }
+                if (data?.clientId) {
+                    localStorage.setItem('clientId', data?.clientId);
+                }
                 navigate('/')
             }).catch((e) => {
                 console.error(e);

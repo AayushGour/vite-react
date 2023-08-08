@@ -53,27 +53,27 @@ const CreateUserComponent = (props) => {
 
     const role = localStorage.getItem('roles');
 
-    useEffect(() => {
-        getClientsList()
-    }, [])
-    const getClientsList = () => {
-        setLoaderFlag(true);
-        const config = {
-            method: "get",
-            url: getClientsListUrl,
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-            }
-        }
-        axios(config).then((resp) => {
-            setClientsList(resp?.data?.data?.data)
-        }).catch((e) => {
-            console.error(e);
-            toast.error(e?.response?.message);
-        }).finally(() => {
-            setLoaderFlag(false);
-        })
-    }
+    // useEffect(() => {
+    //     getClientsList()
+    // }, [])
+    // const getClientsList = () => {
+    //     setLoaderFlag(true);
+    //     const config = {
+    //         method: "get",
+    //         url: getClientsListUrl,
+    //         headers: {
+    //             Authorization: `Bearer ${localStorage.getItem('token')}`,
+    //         }
+    //     }
+    //     axios(config).then((resp) => {
+    //         setClientsList(resp?.data?.data?.data)
+    //     }).catch((e) => {
+    //         console.error(e);
+    //         toast.error(e?.response?.message);
+    //     }).finally(() => {
+    //         setLoaderFlag(false);
+    //     })
+    // }
 
     const handleReferenceChange = (index, key, value) => {
         const refObj = references?.map((e) => e?.index === index ? { ...e, [key]: value } : e);
@@ -135,10 +135,6 @@ const CreateUserComponent = (props) => {
         formData.append("idMarks", idMarks)
         formData.append("maritalStatus", maritalStatus)
         formData.append("appointmentDate", appointmentDate)
-        formData.append("nomineeName", nomineeName)
-        formData.append("nomineeRelation", nomineeRelation)
-        formData.append("nomineeDob", nomineeDob)
-        formData.append("nomineeAddress", nomineeAddress)
         formData.append("accountNumber", accountNumber)
         formData.append("ifscCode", ifscCode)
         formData.append("uanNumber", uanNumber)
