@@ -32,3 +32,6 @@ export const addEmployeeEngagementUrl = BASE_URL + "api/v1/add-employee-engageme
 export const getEmployeeEngagementListUrl = BASE_URL + "api/v1/get-employee-engagement-history";
 
 export const getAttendanceDataUrl = BASE_URL + "api/v1/get-attendance-data";
+export const markAttendanceUrl = BASE_URL + "api/v1/mark-attendance";
+
+export const getEmployeesSalaryDetailsUrl = BASE_URL + "api/v1/get-employees-salary";

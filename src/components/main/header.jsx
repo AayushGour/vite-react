@@ -9,6 +9,7 @@ const HeaderComponent = (props) => {
 
     const logoutUser = () => {
         localStorage.clear();
+        sessionStorage.clear();
         navigate("/login");
     }
 

@@ -19,11 +19,7 @@ const ClientDetailsComponent = (props) => {
     }, [])
 
     const formItems = [
-        {
-            type: "heading",
-            key: "heading",
-            label: "Client Name",
-        },
+
         {
             key: "clientName",
             name: "clientName",

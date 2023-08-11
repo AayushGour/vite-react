@@ -1,3 +1,10 @@
+10-Aug-2023 18:42:30
+submit button on right in attendance
+how to calculate to TBD
+agency payroll TBD
+
+Invoice table, store data in db, status, paid, unpaid etc
+
 06-Aug-2023 13:55:02
 supervisor (agency) -> makes note of entry time (can be manual and/or biometric)
 client supervisor(from client) -> 8 or 12 hour shift
