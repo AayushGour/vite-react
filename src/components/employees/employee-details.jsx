@@ -7,6 +7,8 @@ import { getEmployeeByIdUrl, updateEmployeeDetailsUrl } from '../utility/api-url
 import Loader from '../utility/loader';
 import DetailsFormComponent from '../utility/details-form';
 import ReferenceEditableTable from '../utility/reference-editable-table';
+import { SET_EMPLOYEE_DETAILS_DATA } from '../store/action-types';
+import { useDispatch } from 'react-redux';
 
 const EmployeeDetailsComponent = (props) => {
     const params = useParams();
@@ -17,6 +19,7 @@ const EmployeeDetailsComponent = (props) => {
     const [editingKey, setEditingKey] = useState('');
     const [currentEditing, setCurrentEditing] = useState({});
     const [initialData, setInitialData] = useState({});
+    const dispatch = useDispatch();
 
     const edit = (record) => {
         setEditingKey(record._id);
@@ -509,6 +512,7 @@ const EmployeeDetailsComponent = (props) => {
                 nomineeAddress: resp?.data?.data?.nomineeDetails?.[0]?.nomineeAddress,
                 percentage: resp?.data?.data?.nomineeDetails?.[0]?.percentage,
             }
+            dispatch({ type: SET_EMPLOYEE_DETAILS_DATA, payload: resp?.data?.data })
             setEmployeeData(empDat);
             setInitialData(empDat);
         }).catch((e) => {

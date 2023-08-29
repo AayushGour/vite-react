@@ -6,7 +6,7 @@ import ReferenceEditableTable from './reference-editable-table';
 import NomineeEditableTable from './nominee-editable-table';
 
 const DetailsFormComponent = (props) => {
-    const { onFinish, initialValues, formItems, isEdit, extraButtons, hideEdit } = props;
+    const { onFinish, initialValues, onFormChange, formItems, isEdit, extraButtons, hideEdit } = props;
     const [editMode, setEditMode] = useState(isEdit);
     const [form] = Form.useForm();
 
@@ -26,9 +26,13 @@ const DetailsFormComponent = (props) => {
         }
     }, [form])
 
+    const handleOnChange = (e) => {
+        if (onFormChange)
+            onFormChange(form?.getFieldsValue());
+    }
 
     return (
-        <Form className='details-form' onFinish={(values) => { onFinish(values); setEditMode(false) }} initialValues={initialValues ?? {}}>
+        <Form form={form} onFieldsChange={handleOnChange} className='details-form' onFinish={(values) => { onFinish(values); setEditMode(false) }} initialValues={initialValues ?? {}}>
             <div className="w-100 text-end">
                 {hideEdit ? <></> : <Button className='fs-1rem px-3 py-2 h-auto' type="secondary" onClick={() => {
                     form.resetFields();

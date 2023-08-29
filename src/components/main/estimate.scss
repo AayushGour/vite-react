@@ -1,0 +1,40 @@
+.sales-container {
+    .estimate-container {
+        .estimate-col {
+            b.col-name {
+                height: 2.2rem;
+            }
+            & > span {
+                width: 100%;
+                display: inline-flex;
+                align-items: center;
+                text-align: start;
+                padding: 8px 8px 15px 8px;
+                border-bottom: 1px solid lightgrey;
+                height: 2.3rem;
+                margin: 10px 0px 0px;
+                .ant-select-selector {
+                    height: 2.2rem;
+                    .ant-select-selection-overflow {
+                        height: 100%;
+                        overflow: auto;
+                    }
+                }
+            }
+        }
+        .estimate-cost-container {
+            .estimate-col {
+                min-width: 18%;
+                width: 18%;
+                .col-title {
+                    height: 2.2rem;
+                    button.delete-btn {
+                        background-color: transparent;
+                        border-radius: 8px;
+                        padding: 3px 5px;
+                    }
+                }
+            }
+        }
+    }
+}

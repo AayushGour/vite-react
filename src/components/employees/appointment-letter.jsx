@@ -96,9 +96,9 @@ const AppointmentLetterComponent = (props) => {
                 ol: [
                     {
                         text: [
-                            `With reference to your application for employment and the subsequent interviews you had with us, we are pleased to offer you an appointment as ${employeeDetails?.designation?.toUpperCase()} w.e.f. ${employeeDetails?.appointmentDate?.split("T")[0] ?? "__-__-____"} in our organization on the following terms and conditions: -\n\nYou will be paid a gross salary of Rs. ${values?.salary ?? "______"} /- Only (Rupees as per statutory post and grade) per month.\n\n`,
+                            `With reference to your application for employment and the subsequent interviews you had with us, we are pleased to offer you an appointment as ${employeeDetails?.designation?.toUpperCase()} w.e.f. ${employeeDetails?.appointmentDate?.split("T")[0] ?? "__-__-____"} in our organization on the following terms and conditions: -\n\nYou will be paid a gross salary of Rs. ${employeeDetails?.salaryDetails?.salary ?? "______"} /- Only (Rupees as per statutory post and grade) per month.\n\n`,
                             {
-                                text: `ಉದ್ಯೋಗಕ್ಕಾಗಿ ನಿಮ್ಮ ಅರ್ಜಿ ಮತ್ತು ನೀವು ನಮ್ಮೊಂದಿಗೆ ನಡೆಸಿದ ನಂತರದ ಸಂದರ್ಶನಗಳನ್ನು ಉಲ್ಲೇಖಿಸಿ, ಈ ಕೆಳಗಿನ ನಿಯಮಗಳು ಮತ್ತು ಷರತ್ತುಗಳ ಮೇಲೆ ನಮ್ಮ ಸಂಸ್ಥೆಯಲ್ಲಿ ${employeeDetails?.appointmentDate?.split("T")[0] ?? "__-__-____"} ರಂದು ${employeeDetails?.designation?.toUpperCase()} ಯಾಗಿ ನಿಮಗೆ ಅಪಾಯಿಂಟ್‌ಮೆಂಟ್ ನೀಡಲು ನಾವು ಸಂತೋಷಪಡುತ್ತೇವೆ: -\n\nನಿಮಗೆ ತಿಂಗಳಿಗೆ ರೂ. ${values?.salary ?? "______"} /- ಮಾತ್ರ (ಕಾನೂನುಬದ್ಧ ಹುದ್ದೆ ಮತ್ತು ದರ್ಜೆಯ ಪ್ರಕಾರ ರೂಪಾಯಿಗಳು) ಒಟ್ಟು ವೇತನವನ್ನು ನೀಡಲಾಗುವುದು.\n\n`,
+                                text: `ಉದ್ಯೋಗಕ್ಕಾಗಿ ನಿಮ್ಮ ಅರ್ಜಿ ಮತ್ತು ನೀವು ನಮ್ಮೊಂದಿಗೆ ನಡೆಸಿದ ನಂತರದ ಸಂದರ್ಶನಗಳನ್ನು ಉಲ್ಲೇಖಿಸಿ, ಈ ಕೆಳಗಿನ ನಿಯಮಗಳು ಮತ್ತು ಷರತ್ತುಗಳ ಮೇಲೆ ನಮ್ಮ ಸಂಸ್ಥೆಯಲ್ಲಿ ${employeeDetails?.appointmentDate?.split("T")[0] ?? "__-__-____"} ರಂದು ${employeeDetails?.designation?.toUpperCase()} ಯಾಗಿ ನಿಮಗೆ ಅಪಾಯಿಂಟ್‌ಮೆಂಟ್ ನೀಡಲು ನಾವು ಸಂತೋಷಪಡುತ್ತೇವೆ: -\n\nನಿಮಗೆ ತಿಂಗಳಿಗೆ ರೂ. ${employeeDetails?.salaryDetails?.salary ?? "______"} /- ಮಾತ್ರ (ಕಾನೂನುಬದ್ಧ ಹುದ್ದೆ ಮತ್ತು ದರ್ಜೆಯ ಪ್ರಕಾರ ರೂಪಾಯಿಗಳು) ಒಟ್ಟು ವೇತನವನ್ನು ನೀಡಲಾಗುವುದು.\n\n`,
                                 font: "Kannada-font",
                                 lineHeight: 1.2,
                             },
@@ -254,13 +254,13 @@ const AppointmentLetterComponent = (props) => {
                         >
                             <Input type='date' />
                         </Item>
-                        <Item
+                        {/* <Item
                             name="salary"
                             label="Salary"
                             rules={[{ required: true, message: 'Please enter your salary' }]}
                         >
                             <Input type='number' />
-                        </Item>
+                        </Item> */}
                         <Item
                             name="department"
                             label="Department"

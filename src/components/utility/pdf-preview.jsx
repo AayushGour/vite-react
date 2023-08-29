@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import pdfMake from 'pdfmake/build/pdfmake';
-import pdfFonts from "pdfmake/build/vfs_fonts"
+import * as pdfMake from 'pdfmake/build/pdfmake';
+import * as pdfFonts from "pdfmake/build/vfs_fonts"
 import Loader from './loader';
 import HelveticaFont from "../../assets/fonts/Helvetica.ttf"
 import HelveticaBoldFont from "../../assets/fonts/Helvetica-Bold.ttf"
@@ -20,7 +20,7 @@ function PdfPreview({ docDefinition, className }) {
 
     useEffect(() => {
         const generatePdf = async () => {
-            pdfMake.vfs = pdfFonts.pdfMake.vfs
+            pdfMake.vfs = pdfFonts && pdfFonts.pdfMake ? pdfFonts.pdfMake.vfs : pdfMake.vfs;
 
             pdfMake.vfs["Helvetica.ttf"] = await convertImageToBase64(HelveticaFont)?.then(res => res?.replace("data:font/ttf;base64,", ""));
             pdfMake.vfs["Helvetica-Bold.ttf"] = await convertImageToBase64(HelveticaBoldFont)?.then(res => res?.replace("data:font/ttf;base64,", ""));

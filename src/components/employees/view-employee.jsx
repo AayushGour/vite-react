@@ -7,6 +7,7 @@ import EmployeeEngagementComponent from './employee-engagement';
 import EmployeeInsuranceForm from './employee-insurance-form';
 import ProvidentFundFormComponent from './provident-fund-form';
 import "./view-employee.scss";
+import EmployeeSalaryDetailsComponent from './employee-salary-details';
 
 const ViewEmployeeComponent = (props) => {
     const tabItems = [
@@ -22,16 +23,21 @@ const ViewEmployeeComponent = (props) => {
         },
         {
             key: '3',
+            label: `Salary Details`,
+            children: <EmployeeSalaryDetailsComponent />,
+        },
+        {
+            key: '4',
             label: `Insurance Form`,
             children: <EmployeeInsuranceForm />,
         },
         {
-            key: '4',
+            key: '5',
             label: `Appointment Letter`,
             children: <AppointmentLetterComponent />,
         },
         {
-            key: '5',
+            key: '6',
             label: `EPF Form`,
             children: <ProvidentFundFormComponent />,
         },

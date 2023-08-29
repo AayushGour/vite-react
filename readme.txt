@@ -1,3 +1,14 @@
+13-Aug-2023 19:49:38
+employee's salary is decided based on the assignment at te time of assignment
+
+OT will be calculated based on basic DA, 
+
+professional tax
+25000> then 200
+
+uniform ded is split for various months
+
+
 10-Aug-2023 18:42:30
 submit button on right in attendance
 how to calculate to TBD

@@ -35,3 +35,7 @@ export const getAttendanceDataUrl = BASE_URL + "api/v1/get-attendance-data";
 export const markAttendanceUrl = BASE_URL + "api/v1/mark-attendance";
 
 export const getEmployeesSalaryDetailsUrl = BASE_URL + "api/v1/get-employees-salary";
+export const updateEmployeesSalaryDetailsUrl = BASE_URL + "api/v1/update-employees-salary";
+
+export const getClientPaymentDetailsUrl = BASE_URL + "api/v1/get-payment-data";
+export const getClientInvoiceDetailsUrl = BASE_URL + "api/v1/get-invoice-data";

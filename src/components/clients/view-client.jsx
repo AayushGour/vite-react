@@ -8,6 +8,9 @@ import Loader from '../utility/loader';
 import ClientDetailsComponent from './client-details';
 import { Tabs } from 'antd';
 import EmployeeInsuranceForm from '../employees/employee-insurance-form';
+import PayoutDetailComponent from './payout-details';
+import InvoiceComponent from './invoice';
+import "./view-client.scss";
 
 const ViewClientComponent = (props) => {
     const params = useParams();
@@ -21,6 +24,16 @@ const ViewClientComponent = (props) => {
             label: `Client Details`,
             children: <ClientDetailsComponent />,
         },
+        // {
+        //     key: '2',
+        //     label: `Payout Details`,
+        //     children: <PayoutDetailComponent />,
+        // },
+        {
+            key: '3',
+            label: "Invoice",
+            children: <InvoiceComponent />,
+        }
     ];
 
     return (

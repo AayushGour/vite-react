@@ -59,6 +59,27 @@ const CreateAgencyComponent = (props) => {
                 >
                     <Input />
                 </Item>
+                <Item
+                    label="Account Number"
+                    name="accountNumber"
+                    rules={[{ required: true, message: 'Please enter Account number' }]}
+                >
+                    <Input />
+                </Item>
+                <Item
+                    label="IFSC Code"
+                    name="ifscCode"
+                    rules={[{ required: true, message: 'Please enter IFSC Code' }]}
+                >
+                    <Input />
+                </Item>
+                <Item
+                    label="Bank Name"
+                    name="bankName"
+                    rules={[{ required: true, message: 'Please enter Bank Name' }]}
+                >
+                    <Input />
+                </Item>
 
                 <Item
                     label="Email ID"

@@ -16,6 +16,7 @@ import ManageAgencyComponent from '../agency/manage-agency';
 import ViewAgencyComponent from '../agency/view-agency';
 import AppointmentLetterComponent from '../employees/appointment-letter';
 import EmployeeSalaryTableComponent from '../employees/employee-salary-table';
+import EstimateComponent from './estimate';
 
 const RouterComponent = (props) => {
     return (
@@ -43,6 +44,7 @@ const RouterComponent = (props) => {
                 </Route>
                 <Route path="payroll" element={<EmployeeSalaryTableComponent />} />
                 <Route path="attendance" element={<AttendanceComponent />} />
+                <Route path="estimate" element={<EstimateComponent />} />
             </Route>
             <Route path="*" element={<Navigate to="/" />} />
         </Routes>

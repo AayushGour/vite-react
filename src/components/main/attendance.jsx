@@ -12,6 +12,7 @@ const options = [
     { value: 'present', label: 'Present' },
     { value: 'absent', label: 'Absent' },
     { value: 'week-off', label: 'Week Off' },
+    // { value: 'holiday', label: 'Holiday' },
 ];
 
 const AttendanceComponent = (props) => {
@@ -38,7 +39,7 @@ const AttendanceComponent = (props) => {
         if (attendanceIndex !== -1) {
             attendanceDat[attendanceIndex].status = value;
         } else {
-            attendanceDat.push({ ...record, status: value, date });
+            attendanceDat.push({ ...record, status: value, date, assignmentId: record?._id });
         }
         setEditedAttendance(attendanceDat);
     };
@@ -152,7 +153,8 @@ const AttendanceComponent = (props) => {
             }
         }
         axios(config).then((resp) => {
-            console.log(resp?.data)
+            console.log(resp?.data);
+            toast.success("Attendance saved successfully");
         }).catch((e) => {
             console.error(e);
             toast.error(e?.response?.data?.message || "Something went wrong");
@@ -182,7 +184,9 @@ const AttendanceComponent = (props) => {
                     <>
                         <Table className='attendance-table' bordered columns={generateColumns()} dataSource={dataSource} pagination={false} />
                         {dataSource?.length > 0 ?
-                            <Button type='primary' onClick={handleMarkAttendance}>Submit</Button>
+                            <div className="w-100 d-flex flex-row justify-content-end">
+                                <Button className='mt-3 ms-auto' type='primary' onClick={handleMarkAttendance}>Submit</Button>
+                            </div>
                             : <></>}
                     </>
                 }

@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { addEmployeeEngagementUrl, getClientsListUrl, getEmployeeEngagementListUrl } from '../utility/api-urls';
 import Loader from '../utility/loader';
 import "./employee-engagement.scss";
+import { getComputedSalaryData, getPf } from '../utility/constants';
 
 const EmployeeEngagementComponent = (props) => {
     const { Option } = Select;
@@ -14,9 +15,20 @@ const EmployeeEngagementComponent = (props) => {
 
     const [isClientsListLoading, setIsClientsListLoading] = useState(false);
     const [isHistoryLoading, setIsHistoryLoading] = useState(false);
+    const [loaderFlag, setLoaderFlag] = useState(false);
 
     const [historyList, setHistoryList] = useState([]);
     const [clientsList, setClientsList] = useState([]);
+    const [selectedValue, setSelectedValue] = useState("standard");
+
+
+    const handleSelectChange = (value) => {
+        if (!!value && value?.includes("standard")) {
+            setSelectedValue("standard");
+        } else {
+            setSelectedValue(value)
+        }
+    }
 
     const isDateInRange = (startDate, endDate) => {
         const today = new Date();
@@ -63,14 +75,30 @@ const EmployeeEngagementComponent = (props) => {
     }
 
     const onFinish = (values) => {
-        const { startTime, endTime } = values;
-
+        setLoaderFlag(true);
+        const { startTime, endTime, salary,
+            washingAllowance,
+            uniformCharges,
+            pfConfig,
+            additionalAllowance } = values;
+        // const pf = getPf(selectedValue, values);
+        const salaryDetails = getComputedSalaryData({
+            salary,
+            additionalAllowance,
+            washingAllowance,
+            uniformCharges,
+            pfConfig: pfConfig || selectedValue
+        })
         const payload = {
-            ...values,
+            // ...values,
+            clientId: values?.clientId,
             employeeId: params?.id,
             agencyId: localStorage.getItem('agencyId'),
+            startDate: values?.startDate,
+            endDate: values?.endDate,
             startTime: startTime.format('HH:mm'),
             endTime: endTime.format('HH:mm'),
+            salaryDetails: salaryDetails
         }
         const config = {
             url: addEmployeeEngagementUrl,
@@ -86,6 +114,8 @@ const EmployeeEngagementComponent = (props) => {
         }).catch((e) => {
             console.error(e);
             toast.error(e?.response?.data?.message);
+        }).finally(() => {
+            setLoaderFlag(false);
         })
     };
 
@@ -122,7 +152,8 @@ const EmployeeEngagementComponent = (props) => {
     return (
         <div className="employee-engagement-container h-85 w-100">
             {isClientsListLoading ? <Loader /> :
-                <Form form={form} onFinish={onFinish} className="employee-engagement-form" disabled={clientsList?.length === 0}>
+                <Form form={form} onFinish={onFinish} className="employee-engagement-form position-relative" disabled={clientsList?.length === 0}>
+                    {loaderFlag ? <Loader className="overlay" /> : <></>}
                     <h4 className='text-start pb-3'>Assign Employee</h4>
                     <Form.Item name="clientId" label="Client Name" rules={[{ required: true }]}>
                         <Select className='text-start' placeholder="Select client">
@@ -143,6 +174,75 @@ const EmployeeEngagementComponent = (props) => {
                         <Form.Item className='w-49 time-picker-input' name="endTime" label="End Time" rules={[{ required: true, message: 'Please select an end time' }]}>
                             <TimePicker className='w-100' format="h:mm A" />
                         </Form.Item>
+                    </div>
+                    <div className="salary-form">
+                        <h4 className='w-100 text-start mb-3'>Salary Details</h4>
+                        <div className="d-flex flex-row gap-4">
+                            <Form.Item
+                                name="salary"
+                                label="Salary per month"
+                                rules={[{ required: true, message: 'Please enter the Salary per month' }]}
+                            >
+                                <Input />
+                            </Form.Item>
+
+                            <Form.Item
+                                name="additionalAllowance"
+                                label="Additional Allowance"
+                                rules={[{ required: true, message: 'Please enter the Additional Allowance' }]}
+                            >
+                                <Input />
+                            </Form.Item>
+                        </div>
+                        <div className="d-flex flex-row gap-4">
+                            <Form.Item
+                                name="washingAllowance"
+                                label="Washing Allowance"
+                                rules={[{ required: true, message: 'Please enter the Washing Allowance' }]}
+                            >
+                                <Input />
+                            </Form.Item>
+                            <Form.Item
+                                name="pfConfig"
+                                label="PF Options"
+                                rules={[{ required: true, message: 'Please enter the PF options' }]}
+                            >
+                                <Select value={selectedValue} onChange={handleSelectChange} mode={selectedValue === "standard" ? "" : "multiple"}>
+                                    <Option value="standard">Standard</Option>
+                                    <Option value="salary">Basic</Option>
+                                    <Option value="bonus">Bonus</Option>
+                                    <Option value="nfh">NFH</Option>
+                                    <Option value="earnedLeave">Earned Leave Cost</Option>
+                                </Select>
+                            </Form.Item>
+
+                            {/* <Form.Item
+                                name="esi"
+                                label="ESI"
+                                rules={[{ required: true, message: 'Please enter the ESI' }]}
+                            >
+                                <Input />
+                            </Form.Item> */}
+                        </div>
+
+                        <div className="d-flex flex-row gap-4">
+                            {/* <Form.Item
+                                name="pf"
+                                label="Provident Fund"
+                                rules={[{ required: true, message: 'Please enter the Provident Fund' }]}
+                            >
+                                <Input />
+                            </Form.Item> */}
+
+                            <Form.Item
+                                name="uniformCharges"
+                                label="Uniform Charges"
+                                rules={[{ required: true, message: 'Please enter the Uniform Charges' }]}
+                            >
+                                <Input />
+                            </Form.Item>
+
+                        </div>
                     </div>
                     {/* <Form.Item name="shiftDetails" label="Shift Details" rules={[{ required: true }]}>
                         <Radio.Group className='d-flex flex-column gap-3 pt-1'>
