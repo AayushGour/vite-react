@@ -9,6 +9,8 @@ const { Option } = Select;
 const EstimateComponent = (props) => {
     const [columns, setColumns] = useState([]);
     const [selectedOption, setSelectedOption] = useState('');
+    const [isEditingServiceCharge, setIsEditingServiceCharge] = useState(false);
+    const [serviceChargePercentage, setServiceChargePercentage] = useState(0.1); //value ranges from 0 to 1
 
     const rows = [
         {
@@ -71,9 +73,19 @@ const EstimateComponent = (props) => {
             title: "Total",
             dataKey: "total",
         },
+        {
+            title: "Number of Employees",
+            dataKey: "noOfEmployees",
+        },
+        {
+            title: "Grand Total",
+            dataKey: "grandTotal",
+        },
+
     ]
 
     const handleAddColumn = () => {
+        console.log(columns)
         if (selectedOption) {
             setColumns(prevColumns => [...prevColumns, { id: `${new Date().getTime()}-${prevColumns?.length + 1}`, designation: selectedOption, ...rows?.reduce((acc, cur) => ({ ...acc, [cur?.dataKey]: 0 }), {}) }]);
         }
@@ -86,12 +98,17 @@ const EstimateComponent = (props) => {
     const handleColumnsChange = (column) => {
         const newColumns = columns?.filter((e) => e?.id !== column?.id);
         newColumns.push(column);
-        console.log(newColumns)
         setColumns(newColumns);
     }
 
     const deleteColumn = (id) => {
         setColumns((prev) => prev?.filter((col) => col?.id !== id));
+    }
+
+    const handleServiceChargePercentageChange = (formData) => {
+        console.log(formData);
+        setServiceChargePercentage((Number(formData?.serviceChargePercentage) / 100).toFixed(2));
+        setIsEditingServiceCharge(false);
     }
 
     return (
@@ -100,10 +117,10 @@ const EstimateComponent = (props) => {
             <Form layout='vertical' className="w-100 d-flex flex-row justify-content-start gap-3 align-items-center">
                 <Form.Item label="Select a designation" className='w-15 text-start'>
                     <Select value={selectedOption} placeholder="Select a designation" onChange={handleOptionChange}>
-                        <Option value="LADY GUARD">LADY GUARD</Option>
-                        <Option value="HEAD GUARD">HEAD GUARD</Option>
-                        <Option value="SECURITY SUPERVISOR">SECURITY SUPERVISOR</Option>
-                        <Option value="SECURITY GUARD">SECURITY GUARD</Option>
+                        <Option disabled={!!columns.find((elem) => elem?.designation === "LADY GUARD")} value="LADY GUARD">LADY GUARD</Option>
+                        <Option disabled={!!columns.find((elem) => elem?.designation === "HEAD GUARD")} value="HEAD GUARD">HEAD GUARD</Option>
+                        <Option disabled={!!columns.find((elem) => elem?.designation === "SECURITY SUPERVISOR")} value="SECURITY SUPERVISOR">SECURITY SUPERVISOR</Option>
+                        <Option disabled={!!columns.find((elem) => elem?.designation === "SECURITY GUARD")} value="SECURITY GUARD">SECURITY GUARD</Option>
                     </Select>
                 </Form.Item>
                 <Button onClick={handleAddColumn}>Add Column</Button>
@@ -112,11 +129,50 @@ const EstimateComponent = (props) => {
                 <div className="w-100 h-auto d-flex flex-row estimate-container">
                     <div className="d-flex flex-column align-items-start estimate-col">
                         <b className="d-inline-flex align-items-center px-2 col-name">PARTICULARS</b>
-                        {rows?.map((row) => <span className={row?.dataKey === "total" ? "fw-bold" : ""} key={row?.dataKey}>{row?.title}</span>)}
+                        {rows?.map((row) => {
+                            if (row?.dataKey === "serviceCharges" && !isEditingServiceCharge) {
+                                return <span className="d-flex flex-row justify-content-between" key={row?.dataKey}>
+                                    <div className="d-flex flex-row align-items-baseline gap-2">
+                                        <span>{row?.title}</span>
+                                        <small>({serviceChargePercentage * 100}%)</small>
+                                    </div>
+                                    <button onClick={() => setIsEditingServiceCharge(true)} className='border-0 bg-transparent p-1' title="Edit Service Charge">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg>
+                                    </button>
+                                </span>
+                            } else if (row?.dataKey === "serviceCharges" && isEditingServiceCharge) {
+                                return <span key={row?.dataKey}>
+                                    <Form onFinish={handleServiceChargePercentageChange} className="w-100 d-flex flex-row justify-content-between">
+                                        <Form.Item
+                                            name="serviceChargePercentage"
+                                            className='mb-0'
+                                            initialValue={serviceChargePercentage * 100}
+                                        // rules={[
+                                        //     { required: true, message: 'Please enter a value between 0 and 100' },
+                                        //     { type: 'number', min: 0, max: 100, message: 'Value must be between 0 and 100' },
+                                        // ]}
+                                        >
+                                            <Input type="number" min={0} max={100} placeholder="Enter a value between 0 and 100" defaultValue={serviceChargePercentage * 100} />
+                                        </Form.Item>
+                                        <Form.Item
+                                            className='mb-0'
+                                        >
+                                            <Button title='Save' className='border-0 bg-transparent' htmlType="submit">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="green" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                            </Button>
+                                        </Form.Item>
+                                    </Form>
+
+                                </span>
+                            } else {
+                                return <span className={row?.dataKey === "total" ? "fw-bold" : ""} key={row?.dataKey}>{row?.title}</span>
+                            }
+                        })
+                        }
                     </div>
                     <div className="w-85 d-flex flex-row estimate-cost-container overflow-x-auto">
                         {columns?.sort((a, b) => String(a?.id).localeCompare(String(b?.id)))?.map((col) => {
-                            return <SaleColumnComponent deleteColumn={deleteColumn} key={col?.id} handleColumnsChange={handleColumnsChange} colData={col} />
+                            return <SaleColumnComponent deleteColumn={deleteColumn} key={col?.id} handleColumnsChange={handleColumnsChange} colData={col} serviceChargePercentage={serviceChargePercentage} />
 
                         })}
                     </div>
@@ -128,13 +184,17 @@ const EstimateComponent = (props) => {
     );
 };
 
-const SaleColumnComponent = ({ colData, handleColumnsChange, deleteColumn }) => {
+const SaleColumnComponent = ({ colData, handleColumnsChange, deleteColumn, serviceChargePercentage }) => {
     const [columnData, setColumnData] = useState(colData);
     const [selectedValue, setSelectedValue] = useState("standard");
 
     useEffect(() => {
         handleInputChange("pf", 0);
     }, [selectedValue])
+
+    useEffect(() => {
+        handleInputChange("serviceChargePercentage", serviceChargePercentage);
+    }, [serviceChargePercentage])
 
     const handleInputChange = (key, val, id) => {
         console.log(key, val)
@@ -210,6 +270,10 @@ const SaleColumnComponent = ({ colData, handleColumnsChange, deleteColumn }) => 
                     return <span>{columnData?.serviceCharges}</span>;
                 case "total":
                     return <span className='fw-bold'>{columnData?.total}</span>;
+                case "noOfEmployees":
+                    return <span><Input defaultValue={1} min={1} type='number' onChange={(e) => handleInputChange(key, e?.target?.value, columnData?.id)} value={val} key={columnData?.id + key} /></span>;
+                case "grandTotal":
+                    return <span className='fw-bold'>{columnData?.grandTotal}</span>;
                 default:
                     return "";
             }

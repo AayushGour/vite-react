@@ -20,10 +20,11 @@ export const getComputedSalaryData = (formData, key = "", val = "") => {
     newColumn.pf = getPf(formData?.pfConfig || "standard", newColumn);
     newColumn.bonus = ((Number(formData?.salary)) * 0.0833).toFixed(0);
     newColumn.subTotalB = Number(newColumn?.pf) + Number(newColumn?.esi) + Number(newColumn?.uniformCharges) + Number(newColumn?.nfh) + Number(newColumn?.bonus) + Number(newColumn?.earnedLeave);
-    newColumn.subTotalC = Number(newColumn?.subTotalA) + Number(newColumn?.subTotalB);
     newColumn.relievingCharges = ((Number(newColumn?.subTotalA) + Number(newColumn?.subTotalB)) / 6).toFixed(0);
-    newColumn.serviceCharges = (Number(newColumn.subTotalC) * 0.1).toFixed(0);
+    newColumn.subTotalC = Number(newColumn?.subTotalA) + Number(newColumn?.subTotalB) + Number(newColumn?.relievingCharges);
+    newColumn.serviceCharges = (Number(newColumn.subTotalC) * Number(formData.serviceChargePercentage)).toFixed(0);
     newColumn.total = (Number(newColumn.subTotalC) + Number(newColumn.serviceCharges)).toFixed(0)
+    newColumn.grandTotal = Number(newColumn?.noOfEmployees) * Number(newColumn.total);
     return newColumn;
 }
 

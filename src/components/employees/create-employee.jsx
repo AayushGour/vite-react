@@ -354,6 +354,7 @@ const CreateUserComponent = (props) => {
                                 value={aadharNumber}
                                 onChange={(e) => setAadharNumber(e.target.value)}
                                 required
+                                pattern='\d{12}'
                             />
                             <Form.Control.Feedback type="invalid">
                                 Please provide aadhar number.
@@ -366,6 +367,7 @@ const CreateUserComponent = (props) => {
                                 value={panNumber}
                                 onChange={(e) => setPanNumber(e.target.value)}
                                 required
+                                pattern='[A-Z]{5}[0-9]{4}[A-Z]{1}'
                             />
                             <Form.Control.Feedback type="invalid">
                                 Please provide PAN number.
@@ -494,6 +496,7 @@ const CreateUserComponent = (props) => {
                                 value={ifscCode}
                                 onChange={(e) => setIfscCode(e.target.value)}
                                 required
+                                pattern='[A-Z]{4}[0][A-Z0-9]{6}'
                             />
                             <Form.Control.Feedback type="invalid">
                                 Please provide a IFSC Code.
@@ -506,6 +509,7 @@ const CreateUserComponent = (props) => {
                                 value={uanNumber}
                                 onChange={(e) => setUanNumber(e.target.value)}
                                 required
+                                pattern="[A-Z]{2}/\d{5}/\d{7}"
                             />
                             <Form.Control.Feedback type="invalid">
                                 Please provide a UAN Number.

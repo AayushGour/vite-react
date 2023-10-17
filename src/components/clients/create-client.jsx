@@ -7,6 +7,7 @@ import { createClientUrl } from '../utility/api-urls';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import indiaStateData from "../../assets/json/india.json"
 
 const CreateClientComponent = (props) => {
     const navigate = useNavigate();
@@ -119,6 +120,64 @@ const CreateClientComponent = (props) => {
                             </Form.Control.Feedback>
                         </Form.Group>
 
+                        <Form.Group className='text-start w-32' controlId="country">
+                            <Form.Label>Country</Form.Label>
+                            <Form.Control
+                                type="text"
+                                value={country}
+                                onChange={(e) => setCountry(e.target.value)}
+                                required
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                Please provide a country.
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                        <Form.Group className='text-start w-32' controlId="state">
+                            <Form.Label>State</Form.Label>
+                            {country?.toLowerCase() === "india" ?
+                                <Form.Select
+                                    value={state}
+                                    onChange={(e) => setState(e.target.value)}
+                                    required
+                                >
+                                    <option value="">Select a state</option>
+                                    {Object.keys(indiaStateData)?.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))?.map((st, index) => <option value={st} key={index}>{st}</option>)}
+                                </Form.Select>
+                                : <Form.Control
+                                    type="text"
+                                    value={state}
+                                    onChange={(e) => setState(e.target.value)}
+                                    required
+                                />
+                            }
+                            <Form.Control.Feedback type="invalid">
+                                Please provide a state.
+                            </Form.Control.Feedback>
+                        </Form.Group>
+
+                        <Form.Group className='text-start w-32' controlId="city">
+                            <Form.Label>City</Form.Label>
+                            {country?.toLowerCase() === "india" && state !== "" ?
+                                <Form.Select
+                                    value={city}
+                                    onChange={(e) => setCity(e.target.value)}
+                                    required>
+                                    <option value="">Select a city</option>
+                                    {indiaStateData?.[state]?.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))?.map((cit, ind) => <option key={ind} value={cit}>{cit}</option>)}
+                                </Form.Select>
+                                :
+                                <Form.Control
+                                    type="text"
+                                    value={city}
+                                    onChange={(e) => setCity(e.target.value)}
+                                    required
+                                />
+                            }
+                            <Form.Control.Feedback type="invalid">
+                                Please provide a city.
+                            </Form.Control.Feedback>
+                        </Form.Group>
+
                         <Form.Group className='text-start w-32' controlId="street">
                             <Form.Label>Street</Form.Label>
                             <Form.Control
@@ -129,32 +188,6 @@ const CreateClientComponent = (props) => {
                             />
                             <Form.Control.Feedback type="invalid">
                                 Please provide a street address.
-                            </Form.Control.Feedback>
-                        </Form.Group>
-
-                        <Form.Group className='text-start w-32' controlId="city">
-                            <Form.Label>City</Form.Label>
-                            <Form.Control
-                                type="text"
-                                value={city}
-                                onChange={(e) => setCity(e.target.value)}
-                                required
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                Please provide a city.
-                            </Form.Control.Feedback>
-                        </Form.Group>
-
-                        <Form.Group className='text-start w-32' controlId="state">
-                            <Form.Label>State</Form.Label>
-                            <Form.Control
-                                type="text"
-                                value={state}
-                                onChange={(e) => setState(e.target.value)}
-                                required
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                Please provide a state.
                             </Form.Control.Feedback>
                         </Form.Group>
 
@@ -172,18 +205,7 @@ const CreateClientComponent = (props) => {
                             </Form.Control.Feedback>
                         </Form.Group>
 
-                        <Form.Group className='text-start w-32' controlId="country">
-                            <Form.Label>Country</Form.Label>
-                            <Form.Control
-                                type="text"
-                                value={country}
-                                onChange={(e) => setCountry(e.target.value)}
-                                required
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                Please provide a country.
-                            </Form.Control.Feedback>
-                        </Form.Group>
+
                         <h4 className="text-start w-100 mt-3">Other Details</h4>
                         <Form.Group className='text-start w-49' controlId="panNumber">
                             <Form.Label>PAN Number</Form.Label>
@@ -192,6 +214,7 @@ const CreateClientComponent = (props) => {
                                 value={panNumber}
                                 onChange={(e) => setPanNumber(e.target.value)}
                                 required
+                                pattern='[A-Z]{5}[0-9]{4}[A-Z]{1}'
                             />
                             <Form.Control.Feedback type="invalid">
                                 Please provide a PAN number.
@@ -204,6 +227,7 @@ const CreateClientComponent = (props) => {
                                 value={gstin}
                                 onChange={(e) => setGstin(e.target.value)}
                                 required
+                                pattern='[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Za-z]{1}[Z]{1}[0-9A-Za-z]{1}'
                             />
                             <Form.Control.Feedback type="invalid">
                                 Please provide a GSTIN.
