@@ -96,7 +96,7 @@ const EditEstimateComponent = (props) => {
     const handleAddColumn = () => {
         console.log(columns)
         if (selectedOption) {
-            setColumns(prevColumns => [...prevColumns, { _id: `custom-${new Date().getTime()}-${prevColumns?.length + 1}`, clientId: clientData?.userId, agencyId: clientData?.agencyId, designation: selectedOption, ...rows?.reduce((acc, cur) => ({ ...acc, [cur?.dataKey]: 0 }), {}) }]);
+            setColumns(prevColumns => [...prevColumns, { _id: `custom-${new Date().getTime()}-${prevColumns?.length + 1}`, clientId: clientData?._id, agencyId: clientData?.agencyId, designation: selectedOption, ...rows?.reduce((acc, cur) => ({ ...acc, [cur?.dataKey]: 0 }), {}) }]);
         }
     };
 
