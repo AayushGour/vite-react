@@ -1,3 +1,15 @@
+04-Dec-2023 21:04:50
+move estimate tab to onboard client page
+store estimate along with client details
+in client details, add estimate tab with edit functionality
+Invoice will be based on attendance
+
+Check excel
+incoice will be created for each client per month
+31 days - 24 + 3
+30 days - 24 + 2
+
+
 13-Aug-2023 19:49:38
 employee's salary is decided based on the assignment at te time of assignment
 

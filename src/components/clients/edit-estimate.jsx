@@ -1,16 +1,25 @@
 import { Button, Form, Input, Select, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
-import "./estimate.scss";
+import "../main/estimate.scss";
 import SecondaryHeader from '../utility/secondary-header';
 import { getComputedSalaryData, getPf } from '../utility/constants';
+import { updateEstimateUrl } from '../utility/api-urls';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const { Option } = Select;
 
-const EstimateComponent = (props) => {
+const EditEstimateComponent = (props) => {
+    const { estimateData, onChange: onEstimateChange, clientData } = props;
     const [columns, setColumns] = useState([]);
     const [selectedOption, setSelectedOption] = useState('');
     const [isEditingServiceCharge, setIsEditingServiceCharge] = useState(false);
     const [serviceChargePercentage, setServiceChargePercentage] = useState(0.1); //value ranges from 0 to 1
+
+    useEffect(() => {
+        setColumns(estimateData);
+    }, [estimateData])
+
 
     const rows = [
         {
@@ -87,7 +96,7 @@ const EstimateComponent = (props) => {
     const handleAddColumn = () => {
         console.log(columns)
         if (selectedOption) {
-            setColumns(prevColumns => [...prevColumns, { id: `${new Date().getTime()}-${prevColumns?.length + 1}`, designation: selectedOption, ...rows?.reduce((acc, cur) => ({ ...acc, [cur?.dataKey]: 0 }), {}) }]);
+            setColumns(prevColumns => [...prevColumns, { _id: `custom-${new Date().getTime()}-${prevColumns?.length + 1}`, clientId: clientData?.userId, agencyId: clientData?.agencyId, designation: selectedOption, ...rows?.reduce((acc, cur) => ({ ...acc, [cur?.dataKey]: 0 }), {}) }]);
         }
     };
 
@@ -96,10 +105,13 @@ const EstimateComponent = (props) => {
     };
 
     const handleColumnsChange = (column) => {
-        const newColumns = columns?.filter((e) => e?.id !== column?.id);
-        newColumns.push(column);
-        setColumns(newColumns);
-        props?.onChange(newColumns)
+        const currColumn = columns?.find((e) => e?._id === column?._id);
+        if (!Object.entries(currColumn)?.map(([key, val]) => val === column?.[key])?.every((e) => e === true)) {
+            const newColumns = columns?.filter((e) => e?._id !== column?._id);
+            newColumns.push(column);
+            setColumns(newColumns);
+            onEstimateChange(newColumns)
+        }
     }
 
     const deleteColumn = (id) => {
@@ -112,9 +124,28 @@ const EstimateComponent = (props) => {
         setIsEditingServiceCharge(false);
     }
 
+    const handleSaveEstimate = () => {
+        const data = {
+            clientId: clientData?.userId,
+            agencyId: clientData?.agencyId,
+            estimateData: columns
+        }
+        const config = {
+            url: updateEstimateUrl,
+            method: "post",
+            data,
+        }
+        axios(config).then((resp) => {
+            console.log(resp)
+            toast.success("Estimate Updated Successfully")
+        }).catch((error) => {
+            console.error(error);
+            toast.error(error?.response?.data?.message);
+        })
+    }
+
     return (
-        <div className='px-5 py-4 sales-container h-100 w-100'>
-            <SecondaryHeader title='Estimate' />
+        <div className='sales-container h-100 w-100'>
             <Form layout='vertical' className="w-100 d-flex flex-row justify-content-start gap-3 align-items-center">
                 <Form.Item label="Select a designation" className='w-15 text-start'>
                     <Select value={selectedOption} placeholder="Select a designation" onChange={handleOptionChange}>
@@ -179,6 +210,9 @@ const EstimateComponent = (props) => {
                     </div>
                 </div> : <></>
             }
+            <div className="w-100 d-flex flex-row justify-content-start my-5 pb-5">
+                <Button title='Save' type='primary' onClick={handleSaveEstimate}>Save</Button>
+            </div>
         </div >
 
 
@@ -283,4 +317,4 @@ const SaleColumnComponent = ({ colData, handleColumnsChange, deleteColumn, servi
 }
 
 
-export default EstimateComponent;
+export default EditEstimateComponent;

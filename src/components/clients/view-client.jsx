@@ -11,12 +11,36 @@ import EmployeeInsuranceForm from '../employees/employee-insurance-form';
 import PayoutDetailComponent from './payout-details';
 import InvoiceComponent from './invoice';
 import "./view-client.scss";
+import EstimateComponent from '../main/estimate';
+import EditEstimateComponent from './edit-estimate';
 
 const ViewClientComponent = (props) => {
     const params = useParams();
 
     const [clientData, setClientData] = useState({});
     const [loaderFlag, setLoaderFlag] = useState(true);
+
+    useEffect(() => {
+        getClientDetails(params?.id);
+    }, [])
+
+    const getClientDetails = (clientId) => {
+        const config = {
+            method: "get",
+            url: getClientByIdUrl,
+            params: {
+                clientId
+            }
+        }
+        axios(config).then((resp) => {
+            setClientData(resp?.data?.data);
+        }).catch((e) => {
+            console.error(e);
+            toast.error(e?.response?.data?.message);
+        }).finally(() => {
+            setLoaderFlag(false);
+        })
+    }
 
     const tabItems = [
         {
@@ -33,7 +57,12 @@ const ViewClientComponent = (props) => {
             key: '3',
             label: "Invoice",
             children: <InvoiceComponent />,
-        }
+        },
+        {
+            key: '4',
+            label: "Estimate Details",
+            children: <EditEstimateComponent clientData={clientData} estimateData={clientData?.estimateData} onChange={console.log} />,
+        },
     ];
 
     return (

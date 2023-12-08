@@ -12,6 +12,7 @@ export const createClientUrl = BASE_URL + "api/v1/create-client";
 export const getClientByIdUrl = BASE_URL + "api/v1/get-client";
 export const updateClientByIdUrl = BASE_URL + "api/v1/update-client";
 export const deleteClientByIdUrl = BASE_URL + "api/v1/delete-client";
+export const updateEstimateUrl = BASE_URL + "api/v1/update-estimate";
 
 export const createEmployeeUrl = BASE_URL + "api/v1/create-employee";
 export const getEmployeesListUrl = BASE_URL + "api/v1/get-all-employees";

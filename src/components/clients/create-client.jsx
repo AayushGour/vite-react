@@ -8,6 +8,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import indiaStateData from "../../assets/json/india.json"
+import EstimateComponent from '../main/estimate';
 
 const CreateClientComponent = (props) => {
     const navigate = useNavigate();
@@ -27,6 +28,7 @@ const CreateClientComponent = (props) => {
     const [password, setPassword] = useState('');
     const [currentStep, setCurrentStep] = useState(1);
     const [loaderFlag, setLoaderFlag] = useState(false);
+    const [estimateData, setEstimateData] = useState([]);
 
     const formSteps = [
         {
@@ -36,6 +38,10 @@ const CreateClientComponent = (props) => {
         {
             index: 2,
             title: "Representative Details"
+        },
+        {
+            index: 3,
+            title: "Estimate"
         },
     ]
 
@@ -69,7 +75,8 @@ const CreateClientComponent = (props) => {
                 contactEmail,
                 contactNumber,
                 password,
-                agencyId: localStorage.getItem("agencyId")
+                agencyId: localStorage.getItem("agencyId"),
+                estimateData
             },
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -85,13 +92,17 @@ const CreateClientComponent = (props) => {
             setLoaderFlag(false)
         })
     };
+
+    const handleEstimateChange = (estData) => {
+        console.log("estimate", estData)
+        setEstimateData(estData);
+    }
     return (
         <div className="create-client-container px-5 py-4 h-100 w-auto position-relative">
             <SecondaryHeader title="Onboard Client" />
             <StepsComponent currentStep={currentStep} steps={formSteps} className="mt-3 mx-3" />
             <Form className='mt-4 d-flex flex-row flex-wrap gap-3 pb-4' noValidate validated={validated} onSubmit={handleSubmit}>
                 {currentStep === 1 ?
-
                     <>
                         <h4 className='text-start w-100'>Client Details</h4>
                         <Form.Group className='text-start w-25' controlId="clientName">
@@ -252,7 +263,7 @@ const CreateClientComponent = (props) => {
                             </Button>
                         </div>
                     </>
-                    : <>
+                    : currentStep === 2 ? <>
                         <h4 className='text-start w-100 mt-3'>Representative Details</h4>
                         <Form.Group className='text-start w-49' controlId="contactPerson">
                             <Form.Label>Contact Person</Form.Label>
@@ -313,6 +324,17 @@ const CreateClientComponent = (props) => {
                                     contactNumber === "" ||
                                     password === ""
                                 }
+                                variant="primary" className='ms-2'
+                                onClick={() => setCurrentStep(3)}>
+
+                                Next
+                            </Button>
+                        </div>
+                    </> : <>
+                        <EstimateComponent onChange={handleEstimateChange} />
+                        <div className="w-100 mt-3 text-end">
+                            <Button
+                                disabled={estimateData?.length === 0}
                                 variant="primary" className='ms-2' type="submit">
                                 Submit
                             </Button>
