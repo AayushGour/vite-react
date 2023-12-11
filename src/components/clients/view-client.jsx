@@ -13,6 +13,7 @@ import InvoiceComponent from './invoice';
 import "./view-client.scss";
 import EstimateComponent from '../main/estimate';
 import EditEstimateComponent from './edit-estimate';
+import AttendanceComponent from '../main/attendance';
 
 const ViewClientComponent = (props) => {
     const params = useParams();
@@ -62,6 +63,11 @@ const ViewClientComponent = (props) => {
             key: '4',
             label: "Estimate Details",
             children: <EditEstimateComponent clientData={clientData} estimateData={clientData?.estimateData} onChange={console.log} />,
+        },
+        {
+            key: '5',
+            label: "Attendance",
+            children: <AttendanceComponent isAdmin={true} clientData={clientData} />,
         },
     ];
 

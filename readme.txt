@@ -1,3 +1,10 @@
+11-Dec-2023 11:07:52
+agency
+client sends the attendance to the admin then
+agency marks the attendance 
+based on attendance payroll will be calculated
+
+
 04-Dec-2023 21:04:50
 move estimate tab to onboard client page
 store estimate along with client details

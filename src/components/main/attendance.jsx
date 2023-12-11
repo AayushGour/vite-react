@@ -3,7 +3,7 @@ import SecondaryHeader from '../utility/secondary-header';
 import { Table, DatePicker, TimePicker, Button, Select } from 'antd';
 import dayjs from 'dayjs';
 import "./attendance.scss"
-import { getAttendanceDataUrl, markAttendanceUrl } from '../utility/api-urls';
+import { getAttendanceDataUrl, getClientsListUrl, markAttendanceUrl } from '../utility/api-urls';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import Loader from '../utility/loader';
@@ -17,7 +17,7 @@ const options = [
 
 const AttendanceComponent = (props) => {
     const { Option } = Select;
-
+    const { isAdmin = false, clientData } = props;
 
     // const selectRef = useRef(null);
 
@@ -25,6 +25,7 @@ const AttendanceComponent = (props) => {
     const [dataSource, setDataSource] = useState([]);
     const [loaderFlag, setLoaderFlag] = useState(false);
     const [editedAttendance, setEditedAttendance] = useState([]);
+    const [clientsList, setClientsList] = useState([]);
 
     const handleTimeChange = (time, rowKey, date) => {
         // Handle time change and update the data accordingly
@@ -52,7 +53,7 @@ const AttendanceComponent = (props) => {
             params: {
                 startDate: selectedDate?.startOf('week').toDate(),
                 endDate: selectedDate?.endOf('week').toDate(),
-                clientId: localStorage?.getItem("clientId"),
+                clientId: isAdmin ? clientData?._id : localStorage?.getItem("clientId"),
             }
         };
         axios(config).then((resp) => {
@@ -162,8 +163,8 @@ const AttendanceComponent = (props) => {
     }
 
     return (
-        <div className="attendance-container h-100 w-100 px-5 py-4">
-            <SecondaryHeader title="Attendance" />
+        <div className={`attendance-container h-100 w-100 py-4huj ${isAdmin ? "" : "px-5"}`}>
+            {isAdmin ? <></> : <SecondaryHeader title="Attendance" />}
             <div className='h-90 w-100'>
                 <div className="w-100 d-flex flex-row justify-content-center mb-3 gap-3 align-items-center">
                     <Button title='Previous Week' onClick={() => handleWeekChange(selectedWeek?.subtract(1, 'week'))} ghost icon={<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6" /></svg>} />
