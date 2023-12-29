@@ -15,11 +15,14 @@ const EditEstimateComponent = (props) => {
     const [selectedOption, setSelectedOption] = useState('');
     const [isEditingServiceCharge, setIsEditingServiceCharge] = useState(false);
     const [serviceChargePercentage, setServiceChargePercentage] = useState(0.1); //value ranges from 0 to 1
-
+    const [updateEstiateComponentKey, setUpdateEstiateComponentKey] = useState(new Date().getTime());
     useEffect(() => {
         setColumns(estimateData);
     }, [estimateData])
 
+    useEffect(() => {
+        setUpdateEstiateComponentKey(new Date().getTime());
+    }, [columns])
 
     const rows = [
         {
@@ -94,9 +97,8 @@ const EditEstimateComponent = (props) => {
     ]
 
     const handleAddColumn = () => {
-        console.log(columns)
         if (selectedOption) {
-            setColumns(prevColumns => [...prevColumns, { _id: `custom-${new Date().getTime()}-${prevColumns?.length + 1}`, clientId: clientData?._id, agencyId: clientData?.agencyId, designation: selectedOption, ...rows?.reduce((acc, cur) => ({ ...acc, [cur?.dataKey]: 0 }), {}) }]);
+            setColumns(prevColumns => [...prevColumns, { _id: `custom-${new Date().getTime()}-${prevColumns?.length + 1}`, status: "ACTIVE", clientId: clientData?._id, agencyId: clientData?.agencyId, designation: selectedOption, ...rows?.reduce((acc, cur) => ({ ...acc, [cur?.dataKey]: 0 }), {}) }]);
         }
     };
 
@@ -115,7 +117,12 @@ const EditEstimateComponent = (props) => {
     }
 
     const deleteColumn = (id) => {
-        setColumns((prev) => prev?.filter((col) => col?.id !== id));
+        setColumns((prev) => {
+            const deletedColumn = prev?.find((col) => col?._id === id);
+            deletedColumn.status = "DELETED";
+            const filteredData = [...prev?.filter((col) => col?._id !== id), deletedColumn];
+            return filteredData
+        });
     }
 
     const handleServiceChargePercentageChange = (formData) => {
@@ -136,7 +143,6 @@ const EditEstimateComponent = (props) => {
             data,
         }
         axios(config).then((resp) => {
-            console.log(resp)
             toast.success("Estimate Updated Successfully")
         }).catch((error) => {
             console.error(error);
@@ -202,8 +208,8 @@ const EditEstimateComponent = (props) => {
                         })
                         }
                     </div>
-                    <div className="w-85 d-flex flex-row estimate-cost-container overflow-x-auto">
-                        {columns?.sort((a, b) => String(a?.id).localeCompare(String(b?.id)))?.map((col) => {
+                    <div key={updateEstiateComponentKey} className="w-85 d-flex flex-row estimate-cost-container overflow-x-auto">
+                        {columns?.filter((e) => e?.status === "ACTIVE")?.sort((a, b) => String(a?.id).localeCompare(String(b?.id)))?.map((col) => {
                             return <SaleColumnComponent deleteColumn={deleteColumn} key={col?.id} handleColumnsChange={handleColumnsChange} colData={col} serviceChargePercentage={serviceChargePercentage} />
 
                         })}
@@ -251,10 +257,10 @@ const SaleColumnComponent = ({ colData, handleColumnsChange, deleteColumn, servi
         handleInputChange("pfConfig", selVal)
     }
 
-    return (<div className="w-15 d-flex flex-column align-items-start estimate-col">
-        <div className="col-title px-2 d-inline-flex flex-row justify-content-between align-items-center w-100">
+    return (<div key={colData?._id + new Date().getTime()} className="w-15 d-flex flex-column align-items-start estimate-col">
+        <div style={{ order: "1" }} className="col-title px-2 d-inline-flex flex-row justify-content-between align-items-center w-100">
             <b>{columnData?.designation}</b>
-            <button className='delete-btn' onClick={() => deleteColumn(colData?.id)}>
+            <button className='delete-btn' onClick={() => deleteColumn(colData?._id)}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff0000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
             </button>
         </div>
@@ -266,15 +272,15 @@ const SaleColumnComponent = ({ colData, handleColumnsChange, deleteColumn, servi
             // const relievingCharges = (subTotalA + subTotalB) / 6;
             switch (key) {
                 case "salary":
-                    return <span><Input min={0} type='number' onChange={(e) => handleInputChange(key, e?.target?.value, columnData?.id)} value={val} key={columnData?.id + key} /></span>;
+                    return <span style={{ order: "2" }} ><Input min={0} type='number' onChange={(e) => handleInputChange(key, e?.target?.value, columnData?.id)} value={val} key={columnData?.id + key} /></span>;
                 case "additionalAllowance":
-                    return <span><Input min={0} type='number' onChange={(e) => handleInputChange(key, e?.target?.value, columnData?.id)} value={val} key={columnData?.id + key} /></span>;
+                    return <span style={{ order: "3" }} ><Input min={0} type='number' onChange={(e) => handleInputChange(key, e?.target?.value, columnData?.id)} value={val} key={columnData?.id + key} /></span>;
                 case "washingAllowance":
-                    return <span><Input min={0} type='number' onChange={(e) => handleInputChange(key, e?.target?.value, columnData?.id)} value={val} key={columnData?.id + key} /></span>;
+                    return <span style={{ order: "4" }} ><Input min={0} type='number' onChange={(e) => handleInputChange(key, e?.target?.value, columnData?.id)} value={val} key={columnData?.id + key} /></span>;
                 case "subTotalA":
-                    return <span>{Number(columnData?.salary) + Number(columnData?.additionalAllowance) + Number(columnData?.washingAllowance)}</span>;
+                    return <span style={{ order: "5" }} >{Number(columnData?.salary) + Number(columnData?.additionalAllowance) + Number(columnData?.washingAllowance)}</span>;
                 case "pf":
-                    return <span className='d-flex flex-row justify-content-between'>
+                    return <span style={{ order: "6" }} className='d-flex flex-row justify-content-between'>
                         <span>{columnData?.pf}</span>
                         <Select defaultValue={"standard"} className='w-80' value={selectedValue} onChange={handleSelectChange} mode={selectedValue === "standard" ? "" : "multiple"}>
                             <Option value="standard">Standard</Option>
@@ -285,30 +291,30 @@ const SaleColumnComponent = ({ colData, handleColumnsChange, deleteColumn, servi
                         </Select>
                     </span>;
                 case "esi":
-                    return <span>{columnData?.esi}</span>;
+                    return <span style={{ order: "7" }} >{columnData?.esi}</span>;
                 case "bonus":
-                    return <span>{columnData?.bonus}</span>;
+                    return <span style={{ order: "8" }} >{columnData?.bonus}</span>;
                 case "nfh":
-                    return <span>{columnData?.nfh}</span>;
+                    return <span style={{ order: "9" }} >{columnData?.nfh}</span>;
                 case "earnedLeave":
-                    return <span>{columnData?.earnedLeave}</span>;
+                    return <span style={{ order: "10" }} >{columnData?.earnedLeave}</span>;
                 case "uniformCharges":
-                    return <span ><Input className='w-49' min={0} type='number' onChange={(e) => handleInputChange(key, e?.target?.value, columnData?.id)} value={val} key={columnData?.id + key} />
+                    return <span style={{ order: "11" }} ><Input className='w-49' min={0} type='number' onChange={(e) => handleInputChange(key, e?.target?.value, columnData?.id)} value={val} key={columnData?.id + key} />
                     </span>;
                 case "subTotalB":
-                    return <span>{columnData?.subTotalB}</span>
+                    return <span style={{ order: "12" }} >{columnData?.subTotalB}</span>
                 case "relievingCharges":
-                    return <span>{columnData?.relievingCharges}</span>;
+                    return <span style={{ order: "13" }} >{columnData?.relievingCharges}</span>;
                 case "subTotalC":
-                    return <span>{columnData?.subTotalC}</span>;
+                    return <span style={{ order: "14" }} >{columnData?.subTotalC}</span>;
                 case "serviceCharges":
-                    return <span>{columnData?.serviceCharges}</span>;
+                    return <span style={{ order: "15" }} >{columnData?.serviceCharges}</span>;
                 case "total":
-                    return <span className='fw-bold'>{columnData?.total}</span>;
+                    return <span style={{ order: "16" }} className='fw-bold'>{columnData?.total}</span>;
                 case "noOfEmployees":
-                    return <span><Input defaultValue={1} min={1} type='number' onChange={(e) => handleInputChange(key, e?.target?.value, columnData?.id)} value={val} key={columnData?.id + key} /></span>;
+                    return <span style={{ order: "17" }} ><Input defaultValue={1} min={1} type='number' onChange={(e) => handleInputChange(key, e?.target?.value, columnData?.id)} value={val} key={columnData?.id + key} /></span>;
                 case "grandTotal":
-                    return <span className='fw-bold'>{columnData?.grandTotal}</span>;
+                    return <span style={{ order: "18" }} className='fw-bold'>{columnData?.grandTotal}</span>;
                 default:
                     return "";
             }
