@@ -98,7 +98,24 @@ const EditEstimateComponent = (props) => {
 
     const handleAddColumn = () => {
         if (selectedOption) {
-            setColumns(prevColumns => [...prevColumns, { _id: `custom-${new Date().getTime()}-${prevColumns?.length + 1}`, status: "ACTIVE", clientId: clientData?._id, agencyId: clientData?.agencyId, designation: selectedOption, ...rows?.reduce((acc, cur) => ({ ...acc, [cur?.dataKey]: 0 }), {}) }]);
+            setColumns(prevColumns => [...prevColumns, {
+                _id: `custom-${new Date().getTime()}-${prevColumns?.length + 1}`,
+                status: "ACTIVE", clientId: clientData?._id,
+                agencyId: clientData?.agencyId,
+                designation: selectedOption,
+                ...rows?.reduce((acc, cur) => {
+                    let value;
+                    switch (cur?.dataKey) {
+                        case "noOfEmployees":
+                            value = 1;
+                            break;
+                        default:
+                            value = 0;
+                            break;
+                    }
+                    return { ...acc, [cur?.dataKey]: value }
+                }, {})
+            }]);
         }
     };
 
@@ -257,7 +274,7 @@ const SaleColumnComponent = ({ colData, handleColumnsChange, deleteColumn, servi
         handleInputChange("pfConfig", selVal)
     }
 
-    return (<div key={colData?._id + new Date().getTime()} className="w-15 d-flex flex-column align-items-start estimate-col">
+    return (<div key={colData?._id} className="w-15 d-flex flex-column align-items-start estimate-col">
         <div style={{ order: "1" }} className="col-title px-2 d-inline-flex flex-row justify-content-between align-items-center w-100">
             <b>{columnData?.designation}</b>
             <button className='delete-btn' onClick={() => deleteColumn(colData?._id)}>

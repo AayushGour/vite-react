@@ -25,7 +25,7 @@ const CreateClientComponent = (props) => {
     const [contactNumber, setContactNumber] = useState('');
     const [panNumber, setPanNumber] = useState('');
     const [gstin, setGstin] = useState('');
-    const [password, setPassword] = useState('');
+    const [clientDesignation, setClientDesignation] = useState('');
     const [currentStep, setCurrentStep] = useState(1);
     const [loaderFlag, setLoaderFlag] = useState(false);
     const [estimateData, setEstimateData] = useState([]);
@@ -74,7 +74,7 @@ const CreateClientComponent = (props) => {
                 contactPerson,
                 contactEmail,
                 contactNumber,
-                password,
+                designation: clientDesignation,
                 agencyId: localStorage.getItem("agencyId"),
                 estimateData
             },
@@ -301,16 +301,16 @@ const CreateClientComponent = (props) => {
                                 Please provide a Contact number.
                             </Form.Control.Feedback>
                         </Form.Group>
-                        <Form.Group className='text-start w-49 ' controlId="password">
-                            <Form.Label>Password</Form.Label>
+                        <Form.Group className='text-start w-49 ' controlId="designation">
+                            <Form.Label>Designation</Form.Label>
                             <Form.Control
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                type="designation"
+                                value={clientDesignation}
+                                onChange={(e) => setClientDesignation(e.target.value)}
                                 required
                             />
                             <Form.Control.Feedback type="invalid">
-                                Please provide a Password.
+                                Please provide a Designation.
                             </Form.Control.Feedback>
                         </Form.Group>
                         <div className="w-100 mt-3 text-end">
@@ -322,7 +322,7 @@ const CreateClientComponent = (props) => {
                                     contactPerson === "" ||
                                     contactEmail === "" ||
                                     contactNumber === "" ||
-                                    password === ""
+                                    clientDesignation === ""
                                 }
                                 variant="primary" className='ms-2'
                                 onClick={() => setCurrentStep(3)}>

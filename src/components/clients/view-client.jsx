@@ -57,7 +57,7 @@ const ViewClientComponent = (props) => {
         {
             key: '3',
             label: "Invoice",
-            children: <InvoiceComponent />,
+            children: <InvoiceComponent clientData={clientData} />,
         },
         {
             key: '4',

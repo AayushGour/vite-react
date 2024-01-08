@@ -87,7 +87,22 @@ const EstimateComponent = (props) => {
     const handleAddColumn = () => {
         console.log(columns)
         if (selectedOption) {
-            setColumns(prevColumns => [...prevColumns, { id: `${new Date().getTime()}-${prevColumns?.length + 1}`, designation: selectedOption, ...rows?.reduce((acc, cur) => ({ ...acc, [cur?.dataKey]: 0 }), {}) }]);
+            setColumns(prevColumns => [...prevColumns, {
+                id: `${new Date().getTime()}-${prevColumns?.length + 1}`,
+                designation: selectedOption,
+                ...rows?.reduce((acc, cur) => {
+                    let value;
+                    switch (cur?.dataKey) {
+                        case "noOfEmployees":
+                            value = 1;
+                            break;
+                        default:
+                            value = 0;
+                            break;
+                    }
+                    return { ...acc, [cur?.dataKey]: value }
+                }, {})
+            }]);
         }
     };
 

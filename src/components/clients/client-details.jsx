@@ -116,6 +116,14 @@ const ClientDetailsComponent = (props) => {
             type: "input",
             editable: false,
         },
+        {
+            key: "designation",
+            name: "designation",
+            label: "Contact Designation",
+            rules: [{ required: true, message: 'Please enter the Designation' }],
+            type: "input",
+            editable: true,
+        },
         // {
         //     key: "gstin",
         //     name: "gstin",
