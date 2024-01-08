@@ -138,3 +138,26 @@ report
 buttons as link
 increase font size
 add icons in buttons
+
+
+05-Jan-2024 07:07:10
+Changes to be made in Onboard client
+-> Replace the password Field with Designation ✔
+-> Ability to Add more representative details (New Feature, Major Change)
+-> Add buttons to select GST Type (New Feature)
+-> Client email can be duplicate (Major Change) ✔
+
+Bugs
+-> In Estimate Details - The default number of resources should be 1 ✔
+-> Getting error while saving estimate details ✔
+
+Changes to be made in Invoice Generation (Major Change)
+-> Show a table with Category, Particulars, Rate, No. of persons, Shifts, Amount ✔
+-> Save Data in Database
+-> Generate PDF ✔
+
+Changes to be made in Attendance Component
+-> Redesign Attendance Screen
+-> Show table with emp No, Emp name, Designation, no of days in a month, scale, present days, holidays, duty count
+
+Salary Slip Generation - Needs format and calculation changes
