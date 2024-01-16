@@ -172,10 +172,10 @@ const EditEstimateComponent = (props) => {
             <Form layout='vertical' className="w-100 d-flex flex-row justify-content-start gap-3 align-items-center">
                 <Form.Item label="Select a designation" className='w-15 text-start'>
                     <Select value={selectedOption} placeholder="Select a designation" onChange={handleOptionChange}>
-                        <Option disabled={!!columns.find((elem) => elem?.designation === "LADY GUARD")} value="LADY GUARD">LADY GUARD</Option>
-                        <Option disabled={!!columns.find((elem) => elem?.designation === "HEAD GUARD")} value="HEAD GUARD">HEAD GUARD</Option>
-                        <Option disabled={!!columns.find((elem) => elem?.designation === "SECURITY SUPERVISOR")} value="SECURITY SUPERVISOR">SECURITY SUPERVISOR</Option>
-                        <Option disabled={!!columns.find((elem) => elem?.designation === "SECURITY GUARD")} value="SECURITY GUARD">SECURITY GUARD</Option>
+                        <Option disabled={!!columns?.find((elem) => elem?.designation === "LADY GUARD")} value="LADY GUARD">LADY GUARD</Option>
+                        <Option disabled={!!columns?.find((elem) => elem?.designation === "HEAD GUARD")} value="HEAD GUARD">HEAD GUARD</Option>
+                        <Option disabled={!!columns?.find((elem) => elem?.designation === "SECURITY SUPERVISOR")} value="SECURITY SUPERVISOR">SECURITY SUPERVISOR</Option>
+                        <Option disabled={!!columns?.find((elem) => elem?.designation === "SECURITY GUARD")} value="SECURITY GUARD">SECURITY GUARD</Option>
                     </Select>
                 </Form.Item>
                 <Button onClick={handleAddColumn}>Add Column</Button>
@@ -255,12 +255,11 @@ const SaleColumnComponent = ({ colData, handleColumnsChange, deleteColumn, servi
     }, [serviceChargePercentage])
 
     const handleInputChange = (key, val, id) => {
-        console.log(key, val)
         const newColumn = { ...columnData, [key]: val }
         newColumn.pf = getPf(selectedValue, newColumn);
         const computedData = getComputedSalaryData(newColumn)
         setColumnData(computedData);
-        handleColumnsChange(computedData)
+        // handleColumnsChange(computedData)
     }
 
     const handleSelectChange = (value) => {
@@ -289,17 +288,17 @@ const SaleColumnComponent = ({ colData, handleColumnsChange, deleteColumn, servi
             // const relievingCharges = (subTotalA + subTotalB) / 6;
             switch (key) {
                 case "salary":
-                    return <span style={{ order: "2" }} ><Input min={0} type='number' onChange={(e) => handleInputChange(key, e?.target?.value, columnData?.id)} value={val} key={columnData?.id + key} /></span>;
+                    return <span style={{ order: "2" }} ><Input min={0} type='number' onChange={(e) => handleInputChange(key, e?.target?.value, columnData?.id)} onBlur={() => handleColumnsChange(columnData)} value={val} key={columnData?.id + key} /></span>;
                 case "additionalAllowance":
-                    return <span style={{ order: "3" }} ><Input min={0} type='number' onChange={(e) => handleInputChange(key, e?.target?.value, columnData?.id)} value={val} key={columnData?.id + key} /></span>;
+                    return <span style={{ order: "3" }} ><Input min={0} type='number' onChange={(e) => handleInputChange(key, e?.target?.value, columnData?.id)} onBlur={() => handleColumnsChange(columnData)} value={val} key={columnData?.id + key} /></span>;
                 case "washingAllowance":
-                    return <span style={{ order: "4" }} ><Input min={0} type='number' onChange={(e) => handleInputChange(key, e?.target?.value, columnData?.id)} value={val} key={columnData?.id + key} /></span>;
+                    return <span style={{ order: "4" }} ><Input min={0} type='number' onChange={(e) => handleInputChange(key, e?.target?.value, columnData?.id)} onBlur={() => handleColumnsChange(columnData)} value={val} key={columnData?.id + key} /></span>;
                 case "subTotalA":
                     return <span style={{ order: "5" }} >{Number(columnData?.salary) + Number(columnData?.additionalAllowance) + Number(columnData?.washingAllowance)}</span>;
                 case "pf":
                     return <span style={{ order: "6" }} className='d-flex flex-row justify-content-between'>
                         <span>{columnData?.pf}</span>
-                        <Select defaultValue={"standard"} className='w-80' value={selectedValue} onChange={handleSelectChange} mode={selectedValue === "standard" ? "" : "multiple"}>
+                        <Select defaultValue={"standard"} className='w-80' value={selectedValue} onChange={handleSelectChange} onBlur={() => handleColumnsChange(columnData)} mode={selectedValue === "standard" ? "" : "multiple"}>
                             <Option value="standard">Standard</Option>
                             <Option value="salary">Basic</Option>
                             <Option value="bonus">Bonus</Option>
@@ -316,7 +315,7 @@ const SaleColumnComponent = ({ colData, handleColumnsChange, deleteColumn, servi
                 case "earnedLeave":
                     return <span style={{ order: "10" }} >{columnData?.earnedLeave}</span>;
                 case "uniformCharges":
-                    return <span style={{ order: "11" }} ><Input className='w-49' min={0} type='number' onChange={(e) => handleInputChange(key, e?.target?.value, columnData?.id)} value={val} key={columnData?.id + key} />
+                    return <span style={{ order: "11" }} ><Input className='w-49' min={0} type='number' onChange={(e) => handleInputChange(key, e?.target?.value, columnData?.id)} onBlur={() => handleColumnsChange(columnData)} value={val} key={columnData?.id + key} />
                     </span>;
                 case "subTotalB":
                     return <span style={{ order: "12" }} >{columnData?.subTotalB}</span>
@@ -329,7 +328,7 @@ const SaleColumnComponent = ({ colData, handleColumnsChange, deleteColumn, servi
                 case "total":
                     return <span style={{ order: "16" }} className='fw-bold'>{columnData?.total}</span>;
                 case "noOfEmployees":
-                    return <span style={{ order: "17" }} ><Input defaultValue={1} min={1} type='number' onChange={(e) => handleInputChange(key, e?.target?.value, columnData?.id)} value={val} key={columnData?.id + key} /></span>;
+                    return <span style={{ order: "17" }} ><Input defaultValue={1} min={1} type='number' onChange={(e) => handleInputChange(key, e?.target?.value, columnData?.id)} onBlur={() => handleColumnsChange(columnData)} value={val} key={columnData?.id + key} /></span>;
                 case "grandTotal":
                     return <span style={{ order: "18" }} className='fw-bold'>{columnData?.grandTotal}</span>;
                 default:

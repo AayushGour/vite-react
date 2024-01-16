@@ -42,8 +42,9 @@ const styles = {
 const InvoiceComponent = (props) => {
     const [selectedMonth, setSelectedMonth] = useState();
     const [docDefinition, setDocDefinition] = useState([]);
-    const [generateInvoiceTableData, setGenerateInvoiceTableData] = useState([]);
-    const [agencyDetails, setAgencyDetails] = useState({})
+    const [invoiceTableData, setInvoiceTableData] = useState([]);
+    const [agencyDetails, setAgencyDetails] = useState({});
+
     const params = useParams();
     const previewInvoiceContainerRef = useRef();
 
@@ -80,7 +81,7 @@ const InvoiceComponent = (props) => {
     }, [])
 
 
-    let generateInvoiceTableColumns = [
+    let invoiceTableColumns = [
         {
             title: "Category",
             dataIndex: "designation",
@@ -128,19 +129,23 @@ const InvoiceComponent = (props) => {
     ]
 
     const handleChangeInvoice = (value, updateKey, index) => {
-        setGenerateInvoiceTableData((prev) => prev.map((e, ind) => ind === index ? { ...e, [updateKey]: value } : e));
-        setDocDefinition([])
+        setInvoiceTableData((prev) => prev.map((e, ind) => ind === index ? { ...e, [updateKey]: value } : e));
+        if (docDefinition?.length > 0) {
+            setDocDefinition([]);
+        }
     }
 
     const handleRowDelete = (index) => {
-        setGenerateInvoiceTableData((prev) => prev?.filter((e, i) => i !== index));
-        setDocDefinition([])
+        setInvoiceTableData((prev) => prev?.filter((e, i) => i !== index));
+        if (docDefinition?.length > 0) {
+            setDocDefinition([]);
+        }
     }
 
     const addRowForInvoice = () => {
         const daysInMonth = dayjs(selectedMonth).daysInMonth();
 
-        setGenerateInvoiceTableData((prev) => ([...prev, {
+        setInvoiceTableData((prev) => ([...prev, {
             particulars: "",
             rate: 0,
             noOfEmployees: 1,
@@ -148,8 +153,10 @@ const InvoiceComponent = (props) => {
             designation: "",
             isNew: true,
             amount: 0
-        }]))
-        setDocDefinition([])
+        }]));
+        if (docDefinition?.length > 0) {
+            setDocDefinition([]);
+        }
     }
 
     const generateInvoiceTable = (selectedValue) => {
@@ -168,7 +175,7 @@ const InvoiceComponent = (props) => {
                 amount: est?.grandTotal || 0
             }
         }) : [];
-        setGenerateInvoiceTableData(invoiceTableData);
+        setInvoiceTableData(invoiceTableData);
         setSelectedMonth(selectedValue);
     }
 
@@ -353,7 +360,7 @@ const InvoiceComponent = (props) => {
         const { clientData } = props;
         const daysInMonth = dayjs(selectedMonth).daysInMonth();
         let sumAmount = 0;
-        const serviceData = generateInvoiceTableData?.map((item, index) => {
+        const serviceData = invoiceTableData?.map((item, index) => {
             const totalAmount = Number(item?.shifts) * Number(item?.rate) / Number(daysInMonth);
             sumAmount += totalAmount;
             return [
@@ -392,6 +399,7 @@ const InvoiceComponent = (props) => {
                                 lineHeight: 1.5,
                             },
                             {
+                                layout: "noBorders",
                                 table: {
                                     headerRows: 0,
                                     widths: ['auto', '*'],
@@ -399,60 +407,60 @@ const InvoiceComponent = (props) => {
                                         [
                                             {
                                                 text: "Invoice No.:",
-                                                border: [false, false, false, false],
+                                                // border: [false, false, false, false],
                                                 lineHeight: 1.5,
                                             },
                                             {
                                                 text: "12345",
-                                                border: [false, false, false, false],
+                                                // border: [false, false, false, false],
                                                 lineHeight: 1.5,
                                             },
                                         ],
                                         [
                                             {
                                                 text: "Invoice Date:",
-                                                border: [false, false, false, false],
+                                                // border: [false, false, false, false],
                                                 lineHeight: 1.5,
                                             },
                                             {
                                                 text: `${new Date().toISOString()?.split("T")[0]}`,
-                                                border: [false, false, false, false],
+                                                // border: [false, false, false, false],
                                                 lineHeight: 1.5,
                                             },
                                         ],
                                         [
                                             {
                                                 text: "Place of supply:",
-                                                border: [false, false, false, false],
+                                                // border: [false, false, false, false],
                                                 lineHeight: 1.5,
                                             },
                                             {
                                                 text: `${clientData?.state || "-"}`,
-                                                border: [false, false, false, false],
+                                                // border: [false, false, false, false],
                                                 lineHeight: 1.5,
                                             },
                                         ],
                                         [
                                             {
                                                 text: "PAN No:",
-                                                border: [false, false, false, false],
+                                                // border: [false, false, false, false],
                                                 lineHeight: 1.5,
                                             },
                                             {
                                                 text: `${clientData?.panNumber || "-"}`,
-                                                border: [false, false, false, false],
+                                                // border: [false, false, false, false],
                                                 lineHeight: 1.5,
                                             },
                                         ],
                                         [
                                             {
                                                 text: "GSTIN:",
-                                                border: [false, false, false, false],
+                                                // border: [false, false, false, false],
                                                 lineHeight: 1.5,
                                             },
                                             {
                                                 text: `${clientData?.gstin || "-"}`,
-                                                border: [false, false, false, false],
+                                                // border: [false, false, false, false],
                                                 lineHeight: 1.5,
                                             },
                                         ],
@@ -481,7 +489,7 @@ const InvoiceComponent = (props) => {
             },
             {
                 table: {
-                    // widths: [35, "*", "*", "*", "*", "*", "*"],
+                    widths: [35, "auto", "*", "auto", "auto", "auto", "auto"],
                     headerRows: 1,
                     body: [
                         [
@@ -504,6 +512,7 @@ const InvoiceComponent = (props) => {
                             },
                             {
                                 text: "No. of Staff",
+                                alignment: "center",
                                 border: [true, false, true, true]
                             },
                             {
@@ -547,7 +556,7 @@ const InvoiceComponent = (props) => {
                         ],
                         [
                             {
-                                text: `Amount in words: ${numberToWords(Number(grandTotal))}`,
+                                text: `Amount in words: ${numberToWords(Number(grandTotal))}rupees only.`,
                                 lineHeight: 1.5,
                                 border: [true, true, false, true],
                             },
@@ -597,19 +606,17 @@ const InvoiceComponent = (props) => {
                     <Table
                         className='w-100'
                         bordered
-                        columns={generateInvoiceTableColumns}
-                        dataSource={generateInvoiceTableData}
+                        columns={invoiceTableColumns}
+                        dataSource={invoiceTableData}
                         pagination={false}
                     />
                     <Button className='ms-3 mt-3 align-self-end' type='primary' onClick={handlePreviewInvoice}>Preview Invoice</Button>
                 </div>
                 : <></>}
             {/* {Object.keys(invoiceDetails)?.length > 0 && invoiceDetails?.billData?.length > 0 ? */}
-            {docDefinition?.length > 0 ?
-                <div ref={previewInvoiceContainerRef} className="w-100 h-100 my-3">
-                    <PdfPreview className="w-100 h-100" docDefinition={{ content: docDefinition, styles: styles }} key={1} />
-                </div>
-                : <></>}
+            <div ref={previewInvoiceContainerRef} className={`w-100 h-100 my-3 ${docDefinition?.length > 0 ? "" : "d-none"}`}>
+                <PdfPreview className="w-100 h-100" docDefinition={{ content: docDefinition, styles: styles }} key={1} />
+            </div>
         </div>
     )
 }

@@ -14,6 +14,7 @@ import "./view-client.scss";
 import EstimateComponent from '../main/estimate';
 import EditEstimateComponent from './edit-estimate';
 import AttendanceComponent from '../main/attendance';
+import AttendanceComponentV2 from '../main/attendancev2';
 
 const ViewClientComponent = (props) => {
     const params = useParams();
@@ -67,7 +68,7 @@ const ViewClientComponent = (props) => {
         {
             key: '5',
             label: "Attendance",
-            children: <AttendanceComponent isAdmin={true} clientData={clientData} />,
+            children: <AttendanceComponentV2 isAdmin={true} clientData={clientData} />,
         },
     ];
 

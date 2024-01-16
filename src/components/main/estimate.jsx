@@ -133,10 +133,10 @@ const EstimateComponent = (props) => {
             <Form layout='vertical' className="w-100 d-flex flex-row justify-content-start gap-3 align-items-center">
                 <Form.Item label="Select a designation" className='w-15 text-start'>
                     <Select value={selectedOption} placeholder="Select a designation" onChange={handleOptionChange}>
-                        <Option disabled={!!columns.find((elem) => elem?.designation === "LADY GUARD")} value="LADY GUARD">LADY GUARD</Option>
-                        <Option disabled={!!columns.find((elem) => elem?.designation === "HEAD GUARD")} value="HEAD GUARD">HEAD GUARD</Option>
-                        <Option disabled={!!columns.find((elem) => elem?.designation === "SECURITY SUPERVISOR")} value="SECURITY SUPERVISOR">SECURITY SUPERVISOR</Option>
-                        <Option disabled={!!columns.find((elem) => elem?.designation === "SECURITY GUARD")} value="SECURITY GUARD">SECURITY GUARD</Option>
+                        <Option disabled={!!columns?.find((elem) => elem?.designation === "LADY GUARD")} value="LADY GUARD">LADY GUARD</Option>
+                        <Option disabled={!!columns?.find((elem) => elem?.designation === "HEAD GUARD")} value="HEAD GUARD">HEAD GUARD</Option>
+                        <Option disabled={!!columns?.find((elem) => elem?.designation === "SECURITY SUPERVISOR")} value="SECURITY SUPERVISOR">SECURITY SUPERVISOR</Option>
+                        <Option disabled={!!columns?.find((elem) => elem?.designation === "SECURITY GUARD")} value="SECURITY GUARD">SECURITY GUARD</Option>
                     </Select>
                 </Form.Item>
                 <Button onClick={handleAddColumn}>Add Column</Button>

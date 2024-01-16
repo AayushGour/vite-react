@@ -163,7 +163,7 @@ const AttendanceComponent = (props) => {
     }
 
     return (
-        <div className={`attendance-container h-100 w-100 py-4huj ${isAdmin ? "" : "px-5"}`}>
+        <div className={`attendance-container h-100 w-100 py-4 ${isAdmin ? "" : "px-5"}`}>
             {isAdmin ? <></> : <SecondaryHeader title="Attendance" />}
             <div className='h-90 w-100'>
                 <div className="w-100 d-flex flex-row justify-content-center mb-3 gap-3 align-items-center">
