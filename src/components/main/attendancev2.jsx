@@ -179,7 +179,7 @@ const AttendanceComponentV2 = (props) => {
                         pagination={false}
                     />
                     <div className="w-100 mt-4 text-start">
-                        <Button type='primary' onClick={() => handleAttendanceDataSubmit()}>Save</Button>
+                        <Button disabled={!selectedMonth} type='primary' onClick={() => handleAttendanceDataSubmit()}>Save</Button>
                     </div>
                 </div>
             }
