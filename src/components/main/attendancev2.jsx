@@ -129,6 +129,7 @@ const AttendanceComponentV2 = (props) => {
             // console.log("computeddData", computedData)
             return ({
                 id: emp?._id,
+                assignmentId: emp?._id,
                 agencyId: emp?.agencyId,
                 clientId: emp?.clientId,
                 employeeId: emp?.employeeId,
