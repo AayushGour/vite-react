@@ -13,6 +13,7 @@ export const getClientByIdUrl = BASE_URL + "api/v1/get-client";
 export const updateClientByIdUrl = BASE_URL + "api/v1/update-client";
 export const deleteClientByIdUrl = BASE_URL + "api/v1/delete-client";
 export const updateEstimateUrl = BASE_URL + "api/v1/update-estimate";
+export const getEstimateDataUrl = BASE_URL + "api/v1/get-estimate-data";
 
 export const createEmployeeUrl = BASE_URL + "api/v1/create-employee";
 export const getEmployeesListUrl = BASE_URL + "api/v1/get-all-employees";
@@ -40,3 +41,6 @@ export const updateEmployeesSalaryDetailsUrl = BASE_URL + "api/v1/update-employe
 
 export const getClientPaymentDetailsUrl = BASE_URL + "api/v1/get-payment-data";
 export const getClientInvoiceDetailsUrl = BASE_URL + "api/v1/get-invoice-data";
+
+export const getClientRegisterDataUrl = BASE_URL + "api/v1/get-register-data";
+export const saveInvoiceDataUrl = BASE_URL + "api/v1/save-invoice-data";

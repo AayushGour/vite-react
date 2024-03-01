@@ -1,6 +1,6 @@
 import { Button, DatePicker, Input, Select, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { getAgencyByIdUrl, getClientInvoiceDetailsUrl } from '../utility/api-urls';
+import { getAgencyByIdUrl, getClientByIdUrl, getClientInvoiceDetailsUrl, getEstimateDataUrl, saveInvoiceDataUrl } from '../utility/api-urls';
 import dayjs from 'dayjs';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
@@ -57,7 +57,8 @@ const InvoiceComponent = (props) => {
                 behavior: "smooth",
             });
         }
-    }, [docDefinition])
+    }, [docDefinition]);
+
 
     const getAgencyById = (id) => {
         const config = {
@@ -87,7 +88,7 @@ const InvoiceComponent = (props) => {
             dataIndex: "designation",
             key: "designation",
             render: (text, record, index) => record?.isNew ?
-                <Select placeholder="Select a designation" onChange={(value) => handleChangeInvoice(value, "designation", index)}>
+                <Select className='w-100' defaultValue={text} placeholder="Select a designation" onChange={(value) => handleChangeInvoice(value, "designation", index)}>
                     <Option value="LADY GUARD">LADY GUARD</Option>
                     <Option value="HEAD GUARD">HEAD GUARD</Option>
                     <Option value="SECURITY SUPERVISOR">SECURITY SUPERVISOR</Option>
@@ -119,6 +120,12 @@ const InvoiceComponent = (props) => {
             render: (text, record, index) => <Input onChange={(e) => handleChangeInvoice(e?.target?.value, "shifts", index)} type="number" placeholder="Enter number of shifts" defaultValue={Number(text)} />
         },
         {
+            title: "Amount",
+            dataIndex: "amount",
+            key: "amount",
+            render: (text, record, index) => text
+        },
+        {
             title: "Actions",
             dataIndex: "",
             key: "actions",
@@ -129,7 +136,16 @@ const InvoiceComponent = (props) => {
     ]
 
     const handleChangeInvoice = (value, updateKey, index) => {
-        setInvoiceTableData((prev) => prev.map((e, ind) => ind === index ? { ...e, [updateKey]: value } : e));
+        setInvoiceTableData((prev) => prev.map((e, ind) => {
+            if (ind === index) {
+                const retVal = { ...e, [updateKey]: value };
+                const daysInMonth = dayjs(selectedMonth).daysInMonth();
+                retVal.amount = (Number(retVal?.shifts) * Number(retVal?.noOfEmployees)) * Number(retVal?.rate) / Number(daysInMonth)
+                return retVal;
+            } else {
+                return e;
+            }
+        }));
         if (docDefinition?.length > 0) {
             setDocDefinition([]);
         }
@@ -152,7 +168,9 @@ const InvoiceComponent = (props) => {
             shifts: daysInMonth,
             designation: "",
             isNew: true,
-            amount: 0
+            amount: 0,
+            clientId: params?.id,
+            date: selectedMonth
         }]));
         if (docDefinition?.length > 0) {
             setDocDefinition([]);
@@ -171,7 +189,7 @@ const InvoiceComponent = (props) => {
                 noOfEmployees: noOfPersons,
                 shifts: shifts,
                 designation: est?.designation,
-                isNew: false,
+                isNew: true,
                 amount: est?.grandTotal || 0
             }
         }) : [];
@@ -355,13 +373,30 @@ const InvoiceComponent = (props) => {
     //     ]
     //     setDocDefinition(docDef)
     // }
+    const handleSaveInvoiceData = () => {
+        console.log(invoiceTableData);
+        const config = {
+            method: "post",
+            url: saveInvoiceDataUrl,
+            data: {
+                invoiceData: invoiceTableData
+            }
+        }
+        axios(config).then((resp) => {
+            console.log(resp?.data);
+            toast.success("Successfully Saved Invoice")
+        }).catch((error) => {
+            console.error(error)
+            toast.error(error?.response?.data?.message || "Something went wrong");
+        })
+    }
 
     const handlePreviewInvoice = () => {
         const { clientData } = props;
         const daysInMonth = dayjs(selectedMonth).daysInMonth();
         let sumAmount = 0;
         const serviceData = invoiceTableData?.map((item, index) => {
-            const totalAmount = Number(item?.shifts) * Number(item?.rate) / Number(daysInMonth);
+            const totalAmount = (Number(item?.shifts) * Number(item?.noOfEmployees)) * Number(item?.rate) / Number(daysInMonth);
             sumAmount += totalAmount;
             return [
                 `${index + 1}`,
@@ -610,7 +645,11 @@ const InvoiceComponent = (props) => {
                         dataSource={invoiceTableData}
                         pagination={false}
                     />
-                    <Button className='ms-3 mt-3 align-self-end' type='primary' onClick={handlePreviewInvoice}>Preview Invoice</Button>
+                    <div className="w-100 d-flex flex-row align-items-center justify-content-end">
+                        <Button className='ms-3 mt-3 align-self-end' type='primary' onClick={handleSaveInvoiceData}>Save Invoice</Button>
+                        <Button className='ms-3 mt-3 align-self-end' type='primary' onClick={handlePreviewInvoice}>Preview Invoice</Button>
+
+                    </div>
                 </div>
                 : <></>}
             {/* {Object.keys(invoiceDetails)?.length > 0 && invoiceDetails?.billData?.length > 0 ? */}

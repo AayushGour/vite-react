@@ -15,6 +15,7 @@ import EstimateComponent from '../main/estimate';
 import EditEstimateComponent from './edit-estimate';
 import AttendanceComponent from '../main/attendance';
 import AttendanceComponentV2 from '../main/attendancev2';
+import WageRegisterComponent from './register';
 
 const ViewClientComponent = (props) => {
     const params = useParams();
@@ -70,6 +71,11 @@ const ViewClientComponent = (props) => {
             label: "Attendance",
             children: <AttendanceComponentV2 isAdmin={true} clientData={clientData} />,
         },
+        // {
+        //     key: '6',
+        //     label: "Register of  Wages",
+        //     children: <WageRegisterComponent isAdmin={true} clientData={clientData} />,
+        // },
     ];
 
     return (

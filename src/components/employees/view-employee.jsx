@@ -16,11 +16,11 @@ const ViewEmployeeComponent = (props) => {
             label: `Employee Details`,
             children: <EmployeeDetailsComponent />,
         },
-        {
-            key: '2',
-            label: `Assign Employee`,
-            children: <EmployeeEngagementComponent />,
-        },
+        // {
+        //     key: '2',
+        //     label: `Assign Employee`,
+        //     children: <EmployeeEngagementComponent />,
+        // },
         {
             key: '3',
             label: `Salary Details`,
